@@ -1,0 +1,156 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------< com.travel:touristchain-service >-------------------
+[INFO] Building touristchain-service 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ touristchain-service ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.14.0:compile (default-compile) @ touristchain-service ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ touristchain-service ---
+[INFO] Copying 1 resource from src\test\resources to target\test-classes
+[INFO] 
+[INFO] --- compiler:3.14.0:testCompile (default-testCompile) @ touristchain-service ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.1:test (default-test) @ touristchain-service ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.travel.controllers.auth.LoadTest
+18:48:03.730 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.travel.controllers.auth.LoadTest]: LoadTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+18:48:03.890 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.travel.TouristChainApplication for test class com.travel.controllers.auth.LoadTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.5)
+
+2026-03-23T18:48:04.400-05:00  INFO 9592 --- [           main] com.travel.controllers.auth.LoadTest     : Starting LoadTest using Java 21.0.8 with PID 9592 (started by usuario in C:\Users\usuario\Downloads\MiProyectoSelenium\touristchain\backend)
+2026-03-23T18:48:04.401-05:00  INFO 9592 --- [           main] com.travel.controllers.auth.LoadTest     : The following 1 profile is active: "test"
+2026-03-23T18:48:05.605-05:00  INFO 9592 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-23T18:48:05.606-05:00  INFO 9592 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-23T18:48:05.835-05:00  INFO 9592 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 214 ms. Found 11 JPA repository interfaces.
+2026-03-23T18:48:05.858-05:00  INFO 9592 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-23T18:48:05.860-05:00  INFO 9592 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-03-23T18:48:05.886-05:00  INFO 9592 --- [           main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.travel.repository.BookingRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-03-23T18:48:05.886-05:00  INFO 9592 --- [           main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.travel.repository.catalog.PackageRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-03-23T18:48:05.887-05:00  INFO 9592 --- [           main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.travel.repository.catalog.RateRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-03-23T18:48:05.887-05:00  INFO 9592 --- [           main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.travel.repository.finance.PaymentMethodRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-03-23T18:48:05.887-05:00  INFO 9592 --- [           main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.travel.repository.finance.PaymentRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-03-23T18:48:05.887-05:00  INFO 9592 --- [           main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.travel.repository.ItineraryRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-03-23T18:48:05.887-05:00  INFO 9592 --- [           main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.travel.repository.master.AccommodationRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-03-23T18:48:05.888-05:00  INFO 9592 --- [           main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.travel.repository.master.DestinationRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-03-23T18:48:05.888-05:00  INFO 9592 --- [           main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.travel.repository.master.TransportRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-03-23T18:48:05.888-05:00  INFO 9592 --- [           main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.travel.repository.RoleRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-03-23T18:48:05.888-05:00  INFO 9592 --- [           main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.travel.repository.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-03-23T18:48:05.888-05:00  INFO 9592 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 17 ms. Found 0 Redis repository interfaces.
+2026-03-23T18:48:06.596-05:00  INFO 9592 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-23T18:48:06.675-05:00  INFO 9592 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.26.Final
+2026-03-23T18:48:06.716-05:00  INFO 9592 --- [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-03-23T18:48:07.026-05:00  INFO 9592 --- [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-23T18:48:07.059-05:00  INFO 9592 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-03-23T18:48:07.253-05:00  INFO 9592 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2026-03-23T18:48:07.255-05:00  INFO 9592 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-03-23T18:48:07.279-05:00  WARN 9592 --- [           main] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-23T18:48:07.303-05:00  INFO 9592 --- [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-23T18:48:08.353-05:00  INFO 9592 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+Hibernate: drop table if exists accommodations cascade 
+Hibernate: drop table if exists bookings cascade 
+Hibernate: drop table if exists destinations cascade 
+Hibernate: drop table if exists itineraries cascade 
+Hibernate: drop table if exists packages cascade 
+Hibernate: drop table if exists payment_methods cascade 
+Hibernate: drop table if exists payments cascade 
+Hibernate: drop table if exists rates cascade 
+Hibernate: drop table if exists roles cascade 
+Hibernate: drop table if exists transports cascade 
+Hibernate: drop table if exists users cascade 
+Hibernate: create table accommodations (stars integer, created_at timestamp(6), accommodation_id BINARY(16) not null, destination_id BINARY(16) not null, name varchar(100) not null, address TEXT, primary key (accommodation_id))
+Hibernate: create table bookings (total_amount numeric(10,2) not null, booking_date timestamp(6), booking_id BINARY(16) not null, package_id BINARY(16), rate_id BINARY(16), user_id BINARY(16) not null, status varchar(20), booking_type varchar(50), details TEXT, primary key (booking_id))
+Hibernate: create table destinations (created_at timestamp(6), destination_id BINARY(16) not null, country varchar(50), name varchar(100) not null, description TEXT, primary key (destination_id))
+Hibernate: create table itineraries (end_date timestamp(6), start_date timestamp(6), booking_id BINARY(16) not null, destination_id BINARY(16) not null, itinerary_id BINARY(16) not null, activities TEXT, primary key (itinerary_id))
+Hibernate: create table packages (available_slots integer, end_date date, is_active boolean, start_date date, total_price numeric(10,2) not null, accommodation_id BINARY(16), destination_id BINARY(16), package_id BINARY(16) not null, transport_id BINARY(16), name varchar(150) not null, description TEXT, primary key (package_id))
+Hibernate: create table payment_methods (is_active boolean, payment_method_id BINARY(16) not null, user_id BINARY(16) not null, method_type varchar(50), encrypted_data TEXT, primary key (payment_method_id))
+Hibernate: create table payments (amount_paid numeric(10,2) not null, payment_date timestamp(6), booking_id BINARY(16) not null, payment_id BINARY(16) not null, payment_method_id BINARY(16) not null, payment_status varchar(20), receipt_url varchar(255), primary key (payment_id))
+Hibernate: create table rates (amount numeric(10,2) not null, created_at timestamp(6), rate_id BINARY(16) not null, updated_by BINARY(16), service_type varchar(50), description varchar(100), primary key (rate_id))
+Hibernate: create table roles (role_id BINARY(16) not null, name varchar(50) not null, primary key (role_id))
+Hibernate: create table transports (max_capacity integer, transport_id BINARY(16) not null, transport_type varchar(50), provider_company varchar(100), primary key (transport_id))
+Hibernate: create table users (is_active boolean, created_at timestamp(6), updated_at timestamp(6), role_id BINARY(16) not null, user_id BINARY(16) not null, document varchar(20) not null, email varchar(100) not null unique, full_name varchar(100) not null, password varchar(255) not null, primary key (user_id))
+Hibernate: alter table if exists accommodations add constraint FKtk29icpreusaykupwkfc30d70 foreign key (destination_id) references destinations
+Hibernate: alter table if exists bookings add constraint FKn59unghde3qt55aqfaxh1klif foreign key (rate_id) references rates
+Hibernate: alter table if exists bookings add constraint FKpsi0jsj8kjkqse44mspx80bk3 foreign key (package_id) references packages
+Hibernate: alter table if exists bookings add constraint FKeyog2oic85xg7hsu2je2lx3s6 foreign key (user_id) references users
+Hibernate: alter table if exists itineraries add constraint FKr3iltc7dji2o2e0y2k55cfph8 foreign key (booking_id) references bookings
+Hibernate: alter table if exists itineraries add constraint FKjof330tfrq1p882rcqnwovrq0 foreign key (destination_id) references destinations
+Hibernate: alter table if exists packages add constraint FKiaq4k124s5c1vk4jv4iarsafo foreign key (accommodation_id) references accommodations
+Hibernate: alter table if exists packages add constraint FKgc5l6wjhi58sn8fla4paab917 foreign key (destination_id) references destinations
+Hibernate: alter table if exists packages add constraint FKq9lp9281xvfemlbf6k3kqr0w6 foreign key (transport_id) references transports
+Hibernate: alter table if exists payment_methods add constraint FKin7rtmim3ljrrhh5kxbq27s2v foreign key (user_id) references users
+Hibernate: alter table if exists payments add constraint FKc52o2b1jkxttngufqp3t7jr3h foreign key (booking_id) references bookings
+Hibernate: alter table if exists payments add constraint FKce1n8pa67lq4l57l9mhugdgab foreign key (payment_method_id) references payment_methods
+Hibernate: alter table if exists rates add constraint FK3kcjvvminstqmynavi7oi80eb foreign key (updated_by) references users
+Hibernate: alter table if exists users add constraint FKp56c1712k691lhsyewcssf40f foreign key (role_id) references roles
+2026-03-23T18:48:08.414-05:00  INFO 9592 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-23T18:48:08.802-05:00  INFO 9592 --- [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2026-03-23T18:48:09.025-05:00  WARN 9592 --- [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-23T18:48:09.854-05:00  INFO 9592 --- [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-03-23T18:48:10.522-05:00  INFO 9592 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-03-23T18:48:10.522-05:00  INFO 9592 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-03-23T18:48:10.524-05:00  INFO 9592 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 2 ms
+2026-03-23T18:48:10.659-05:00  INFO 9592 --- [           main] com.travel.controllers.auth.LoadTest     : Started LoadTest in 6.6 seconds (process running for 7.672)
+Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+WARNING: A Java agent has been loaded dynamically (C:\Users\usuario\.m2\repository\net\bytebuddy\byte-buddy-agent\1.17.7\byte-buddy-agent-1.17.7.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0
+Hibernate: insert into roles (name,role_id) values (?,?)
+2026-03-23T18:48:11.238-05:00  INFO 9592 --- [           main] com.travel.controllers.auth.LoadTest     : --- INICIANDO PRUEBAS DE DESEMPEÑO ---
+2026-03-23T18:48:11.238-05:00  INFO 9592 --- [           main] com.travel.controllers.auth.LoadTest     : Iniciando registro de 1000000 usuarios...
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+2026-03-23T18:48:11.487-05:00  INFO 9592 --- [           main] com.travel.controllers.auth.LoadTest     : Registrados 0 usuarios...
+2026-03-23T18:48:11.487-05:00  INFO 9592 --- [           main] com.travel.controllers.auth.LoadTest     : Registro de 1 usuarios completado en 249 ms
+2026-03-23T18:48:11.487-05:00  INFO 9592 --- [           main] com.travel.controllers.auth.LoadTest     : Tiempo promedio por registro: 249.0 ms
+2026-03-23T18:48:11.487-05:00  INFO 9592 --- [           main] com.travel.controllers.auth.LoadTest     : Iniciando prueba de estrés con 50000 logins concurrentes...
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.role_id=?
+2026-03-23T18:48:11.650-05:00  INFO 9592 --- [           main] com.travel.controllers.auth.LoadTest     : Prueba de estrés completada.
+2026-03-23T18:48:11.650-05:00  INFO 9592 --- [           main] com.travel.controllers.auth.LoadTest     : Logins exitosos: 1
+2026-03-23T18:48:11.650-05:00  INFO 9592 --- [           main] com.travel.controllers.auth.LoadTest     : Tiempo total: 161 ms
+2026-03-23T18:48:11.650-05:00  INFO 9592 --- [           main] com.travel.controllers.auth.LoadTest     : Tiempo promedio de respuesta (Login): 160.0 ms
+2026-03-23T18:48:11.650-05:00  INFO 9592 --- [           main] com.travel.controllers.auth.LoadTest     : --- PRUEBAS DE DESEMPEÑO FINALIZADAS ---
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 8.076 s -- in com.travel.controllers.auth.LoadTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  11.097 s
+[INFO] Finished at: 2026-03-23T18:48:12-05:00
+[INFO] ------------------------------------------------------------------------

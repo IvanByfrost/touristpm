@@ -3,7 +3,7 @@ package com.travel.controllers.auth;
 import com.travel.model.auth.User;
 import com.travel.dto.UserResponseDTO;
 import com.travel.repository.UserRepository;
-
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,9 +42,16 @@ public class UserController {
 
     // 4. ACTUALIZAR (PUT)
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable UUID id, @RequestBody User userDetails) {
+    public ResponseEntity<?> updateUser(@PathVariable UUID id, @Valid @RequestBody User userDetails) {
         return userRepository.findById(id).map(user -> {
+            // Validar que el nuevo correo no esté en uso por otro usuario
+            if (!user.getEmail().equals(userDetails.getEmail()) && 
+                userRepository.findByEmail(userDetails.getEmail()).isPresent()) {
+                return ResponseEntity.badRequest().body("Error: El correo ya está en uso");
+            }
+
             user.setFullName(userDetails.getFullName());
+            user.setDocument(userDetails.getDocument());
             user.setEmail(userDetails.getEmail());
             // No actualizamos el password así de fácil en la vida real, pero para el plan
             // sirve

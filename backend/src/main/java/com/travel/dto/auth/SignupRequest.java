@@ -14,6 +14,11 @@ public class SignupRequest {
   private String fullName;
 
   @NotBlank
+  @Size(min = 5, max = 20)
+  @Pattern(regexp = "\\d+", message = "El documento debe contener solo números")
+  private String document;
+
+  @NotBlank
   @Size(max = 100)
   @Email
   private String email;

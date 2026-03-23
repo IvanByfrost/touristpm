@@ -1,6 +1,9 @@
 package com.travel.model.auth;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,9 +32,17 @@ public class User implements UserDetails {
     private Role role;
 
     @Column(name = "full_name", nullable = false, length = 100)
+    @NotBlank(message = "El campo nombre es obligatorio")
     private String fullName;
 
+    @Column(name = "document", nullable = false, length = 20)
+    @NotBlank(message = "El documento es obligatorio")
+    @Pattern(regexp = "\\d+", message = "El documento debe contener solo números")
+    private String document;
+
     @Column(name = "email", unique = true, nullable = false, length = 100)
+    @NotBlank(message = "El email es obligatorio")
+    @Email(message = "El formato del email es inválido")
     private String email;
 
     @Column(name = "password", nullable = false)

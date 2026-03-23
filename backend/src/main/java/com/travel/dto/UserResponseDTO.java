@@ -14,6 +14,7 @@ import java.util.UUID;
 public class UserResponseDTO {
     private UUID userId;
     private String fullName;
+    private String document;
     private String email;
     private Role role;
     private Boolean isActive;
@@ -22,6 +23,7 @@ public class UserResponseDTO {
         return UserResponseDTO.builder()
                 .userId(user.getUserId())
                 .fullName(user.getFullName())
+                .document(user.getDocument())
                 .email(user.getEmail())
                 .role(user.getRole())
                 .isActive(user.getIsActive())
