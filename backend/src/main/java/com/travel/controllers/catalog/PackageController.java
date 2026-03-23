@@ -1,7 +1,8 @@
-package com.travel.model.catalog.controllers;
+package com.travel.controllers.catalog;
 
 import com.travel.model.catalog.Package;
-import com.travel.model.catalog.repository.PackageRepository;
+import com.travel.repository.catalog.PackageRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

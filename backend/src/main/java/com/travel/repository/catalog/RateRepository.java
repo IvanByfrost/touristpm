@@ -1,4 +1,4 @@
-package com.travel.model.catalog.repository;
+package com.travel.repository.catalog;
 
 import com.travel.model.catalog.Rate;
 import org.springframework.data.jpa.repository.JpaRepository;
