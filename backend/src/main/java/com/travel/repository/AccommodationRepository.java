@@ -1,4 +1,4 @@
-package com.travel.model.master.repository;
+package com.travel.repository;
 
 import com.travel.model.master.Accommodation;
 import org.springframework.data.jpa.repository.JpaRepository;

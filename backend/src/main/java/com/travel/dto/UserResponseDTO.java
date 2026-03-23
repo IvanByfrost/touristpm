@@ -1,4 +1,4 @@
-package com.travel.model.auth.dto;
+package com.travel.dto;
 
 import com.travel.model.auth.User;
 import com.travel.model.auth.Role;

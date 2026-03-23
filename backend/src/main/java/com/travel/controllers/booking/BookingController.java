@@ -1,4 +1,4 @@
-package com.travel.controllers;
+package com.travel.controllers.booking;
 
 import com.travel.model.booking.Booking;
 import com.travel.repository.BookingRepository;

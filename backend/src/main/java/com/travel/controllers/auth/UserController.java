@@ -1,7 +1,7 @@
-package com.travel.controllers;
+package com.travel.controllers.auth;
 
 import com.travel.model.auth.User;
-import com.travel.model.auth.dto.UserResponseDTO;
+import com.travel.dto.UserResponseDTO;
 import com.travel.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
