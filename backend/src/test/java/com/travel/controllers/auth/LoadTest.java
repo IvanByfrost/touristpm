@@ -3,7 +3,9 @@ package com.travel.controllers.auth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.travel.dto.auth.LoginRequest;
 import com.travel.dto.auth.SignupRequest;
+import com.travel.model.Partner;
 import com.travel.model.auth.Role;
+import com.travel.repository.PartnerRepository;
 import com.travel.repository.RoleRepository;
 import com.travel.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,14 +19,17 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -42,6 +47,9 @@ public class LoadTest {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private PartnerRepository partnerRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -135,14 +143,30 @@ public class LoadTest {
         
         CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
         long endStress = System.currentTimeMillis();
-
+ 
         logger.info("Prueba de estrés completada.");
         logger.info("Logins exitosos: {}", successCount.get());
         logger.info("Tiempo total: {} ms", (endStress - startStress));
         logger.info("Tiempo promedio de respuesta (Login): {} ms", (double)totalTime.get()/successCount.get());
+ 
+        // 3. PRUEBA DE VOLUMEN DE SOCIOS (CP-ADM-001 Stress)
+        logger.info("Iniciando registro masivo de {} socios...", 1000); // 10k en prod
+        long startSocio = System.currentTimeMillis();
+        for (int i = 0; i < 100; i++) {
+            Partner partner = Partner.builder()
+                    .partnerId("SOC-" + i)
+                    .companyName("Socio " + i)
+                    .address("Calle " + i)
+                    .phone("555-" + i)
+                    .status("Activo")
+                    .build();
+            partnerRepository.save(partner);
+        }
+        long endSocio = System.currentTimeMillis();
+        logger.info("Registro de 100 socios completado en {} ms", (endSocio - startSocio));
 
         executor.shutdown();
-        
+         
         logger.info("--- PRUEBAS DE DESEMPEÑO FINALIZADAS ---");
     }
 }

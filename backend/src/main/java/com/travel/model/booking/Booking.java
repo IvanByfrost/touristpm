@@ -28,11 +28,11 @@ public class Booking {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "package_id") // Es opcional
+    @JoinColumn(name = "package_id")
     private Package travelPackage;
 
     @ManyToOne
-    @JoinColumn(name = "rate_id") // Es opcional
+    @JoinColumn(name = "rate_id")
     private Rate rate;
 
     @Column(name = "booking_type", length = 50)

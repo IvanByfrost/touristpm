@@ -15933,3 +15933,160 @@ Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.ful
 Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
 Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
 Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+Hibernate: select r1_0.role_id,r1_0.name from roles r1_0 where r1_0.name=?
+Hibernate: insert into users (created_at,document,email,full_name,is_active,password,role_id,updated_at,user_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.user_id,u1_0.created_at,u1_0.document,u1_0.email,u1_0.full_name,u1_0.is_active,u1_0.password,u1_0.role_id,u1_0.updated_at from users u1_0 where u1_0.email=?
+^C

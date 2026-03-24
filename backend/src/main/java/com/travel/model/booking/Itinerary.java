@@ -1,9 +1,7 @@
 package com.travel.model.booking;
 
-import com.travel.model.master.Destination;
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -24,16 +22,9 @@ public class Itinerary {
     @JoinColumn(name = "booking_id", nullable = false)
     private Booking booking;
 
-    @ManyToOne
-    @JoinColumn(name = "destination_id", nullable = false)
-    private Destination destination;
-
-    @Column(name = "start_date")
-    private LocalDateTime startDate;
-
-    @Column(name = "end_date")
-    private LocalDateTime endDate;
-
     @Column(columnDefinition = "TEXT")
-    private String activities;
+    private String description;
+
+    @Column(name = "activity_date")
+    private java.time.LocalDateTime activityDate;
 }

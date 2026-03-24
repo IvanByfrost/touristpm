@@ -1,11 +1,14 @@
 package com.travel.controllers.auth;
 
+import com.travel.dto.auth.DeleteAccountRequest;
 import com.travel.model.auth.User;
 import com.travel.dto.UserResponseDTO;
 import com.travel.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +20,7 @@ import java.util.UUID;
 public class UserController {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping
     public List<UserResponseDTO> getAllUsers() {
@@ -61,10 +65,14 @@ public class UserController {
 
     // 5. ELIMINAR (DELETE)
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable UUID id) {
+    public ResponseEntity<?> deleteUser(@PathVariable UUID id, @RequestBody DeleteAccountRequest request) {
         return userRepository.findById(id).map(user -> {
+            // CP-TUR-014: Validar identidad antes de borrar
+            if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: Fallo de seguridad");
+            }
             userRepository.delete(user);
-            return ResponseEntity.noContent().<Void>build();
+            return ResponseEntity.noContent().build();
         }).orElse(ResponseEntity.notFound().build());
     }
 }

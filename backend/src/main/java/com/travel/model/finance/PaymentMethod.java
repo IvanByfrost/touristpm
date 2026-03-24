@@ -26,6 +26,15 @@ public class PaymentMethod {
     @Column(name = "method_type", length = 50)
     private String methodType;
 
+    @Column(name = "card_number", length = 20)
+    private String cardNumber;
+
+    @Column(name = "holder_name", length = 100)
+    private String holderName;
+
+    @Column(name = "expiration_date", length = 10)
+    private String expirationDate;
+
     @Column(name = "encrypted_data", columnDefinition = "TEXT")
     private String encryptedData;
 

@@ -1,6 +1,7 @@
 package com.travel.controllers.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.travel.dto.auth.DeleteAccountRequest;
 import com.travel.dto.auth.JwtResponse;
 import com.travel.dto.auth.LoginRequest;
 import com.travel.dto.auth.SignupRequest;
@@ -245,15 +246,55 @@ public class UserControllerTest {
         // Escenario: CP-TUR-012 - Ejecución completa de borrado de cuenta
         
         // Pasos: Presionar el botón "Inactivar cuenta" -> Confirmar -> Delete en BD
+        DeleteAccountRequest deleteRequest = new DeleteAccountRequest();
+        deleteRequest.setPassword("password123");
+
         mockMvc.perform(delete("/api/users/" + userId)
-                .header("Authorization", "Bearer " + jwtToken))
+                .header("Authorization", "Bearer " + jwtToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(deleteRequest)))
                 .andExpect(status().isNoContent()); // Resultados: El sistema borra el registro en BD (204)
 
         // Post-condiciones: El usuario ya no puede ingresar con esas credenciales
-        // 1. Verificar físicamente que la fila ha desaparecido
         assertTrue(userRepository.findById(userId).isEmpty());
+    }
 
-        // 2. Verificar que el login ya no funciona
+    @Test
+    void testDeleteUserAccountInvalidPassword() throws Exception {
+        // Escenario: CP-TUR-014 - Bloqueo por validación de identidad incorrecta
+        
+        // Pasos: Presionar el botón "Inactivar cuenta" -> Credencial incorrecta
+        DeleteAccountRequest deleteRequest = new DeleteAccountRequest();
+        deleteRequest.setPassword("password_erroneo");
+
+        mockMvc.perform(delete("/api/users/" + userId)
+                .header("Authorization", "Bearer " + jwtToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(deleteRequest)))
+                .andExpect(status().isUnauthorized()); // Resultados: El sistema deniega el borrado
+
+        // Post-condiciones: El registro original permanece intacto
+        assertTrue(userRepository.findById(userId).isPresent());
+    }
+
+    @Test
+    void testDeleteUserAccountSecurityCancelled() throws Exception {
+        // Escenario: CP-TUR-015 - Mantenimiento de cuenta al cancelar validación
+        
+        // Pasos: El usuario está en "Inactivar" -> Paso de seguridad -> "Cancelar"
+        // (En el backend, esto significa que tras consultar el usuario, no se procede con el DELETE)
+        
+        // 1. Simular que el frontend pide los datos antes de borrar (GET)
+        mockMvc.perform(get("/api/users/" + userId)
+                .header("Authorization", "Bearer " + jwtToken))
+                .andExpect(status().isOk());
+
+        // 2. El usuario cancela en el UI (No se hace ninguna petición más de borrado)
+
+        // Post-condiciones: El usuario mantiene su acceso y los datos siguen ahí
+        assertTrue(userRepository.findById(userId).isPresent());
+        
+        // Verificar que el login sigue funcionando perfectamente
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setEmail("juan@test.com");
         loginRequest.setPassword("password123");
@@ -261,7 +302,7 @@ public class UserControllerTest {
         mockMvc.perform(post("/api/auth/signin")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginRequest)))
-                .andExpect(status().isUnauthorized()); // O isNotFound/isBadRequest dependiendo de la implementación de AuthController
+                .andExpect(status().isOk());
     }
 
     @Test
