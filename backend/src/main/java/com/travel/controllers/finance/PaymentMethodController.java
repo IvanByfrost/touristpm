@@ -5,6 +5,7 @@ import com.travel.model.auth.User;
 import com.travel.model.finance.PaymentMethod;
 import com.travel.repository.finance.PaymentMethodRepository;
 import com.travel.repository.UserRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,7 +33,7 @@ public class PaymentMethodController {
     }
 
     @PostMapping
-    public PaymentMethodDTO create(@RequestBody PaymentMethod method) {
+    public PaymentMethodDTO create(@Valid @RequestBody PaymentMethod method) {
         User user = getAuthenticatedUser();
         method.setUser(user);
         PaymentMethod saved = paymentMethodRepository.save(method);

@@ -2,6 +2,9 @@ package com.travel.model.finance;
 
 import com.travel.model.auth.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import java.util.UUID;
 
@@ -27,6 +30,9 @@ public class PaymentMethod {
     private String methodType;
 
     @Column(name = "card_number", length = 20)
+    @NotBlank(message = "El número de tarjeta es obligatorio")
+    @Size(min = 16, message = "El formato del número es incorrecto")
+    @Pattern(regexp = "[\\d\\s]+", message = "El formato del número es incorrecto")
     private String cardNumber;
 
     @Column(name = "holder_name", length = 100)

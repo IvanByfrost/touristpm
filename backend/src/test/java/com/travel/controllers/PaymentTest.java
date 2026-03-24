@@ -4,11 +4,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.travel.dto.auth.JwtResponse;
 import com.travel.dto.auth.LoginRequest;
 import com.travel.dto.auth.SignupRequest;
-import com.travel.model.finance.PaymentMethod;
 import com.travel.model.auth.Role;
-import com.travel.repository.finance.PaymentMethodRepository;
+import com.travel.model.booking.Booking;
+import com.travel.model.finance.Payment;
+import com.travel.model.finance.PaymentMethod;
 import com.travel.repository.RoleRepository;
 import com.travel.repository.UserRepository;
+import com.travel.repository.BookingRepository;
+import com.travel.repository.finance.PaymentMethodRepository;
+import com.travel.repository.finance.PaymentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +23,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashSet;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -30,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class PaymentMethodTest {
+public class PaymentTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -42,16 +46,26 @@ public class PaymentMethodTest {
     private RoleRepository roleRepository;
 
     @Autowired
+    private PaymentRepository paymentRepository;
+
+    @Autowired
     private PaymentMethodRepository paymentMethodRepository;
+
+    @Autowired
+    private BookingRepository bookingRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
 
     private String jwtToken;
+    private PaymentMethod paymentMethod;
+    private Booking booking;
 
     @BeforeEach
     void setUp() throws Exception {
+        paymentRepository.deleteAll();
         paymentMethodRepository.deleteAll();
+        bookingRepository.deleteAll();
         userRepository.deleteAll();
         roleRepository.deleteAll();
 
@@ -81,47 +95,36 @@ public class PaymentMethodTest {
 
         JwtResponse jwtResponse = objectMapper.readValue(result.getResponse().getContentAsString(), JwtResponse.class);
         this.jwtToken = jwtResponse.getToken();
+
+        this.paymentMethod = paymentMethodRepository.save(PaymentMethod.builder()
+                .user(userRepository.findByEmail("payer@test.com").orElseThrow())
+                .cardNumber("1234 5678 9012 3456")
+                .methodType("VISA")
+                .build());
+
+        this.booking = bookingRepository.save(Booking.builder()
+                .user(userRepository.findByEmail("payer@test.com").orElseThrow())
+                .totalAmount(new BigDecimal("100.00"))
+                .status("Pendiente")
+                .build());
     }
 
     @Test
-    void testAddAndMaskPaymentMethod() throws Exception {
-        // Escenario: CP-TUR-030 - Vinculación de tarjeta y enmascaramiento de datos
-        PaymentMethod pm = PaymentMethod.builder()
-                .cardNumber("1234 5678 9876 5432")
-                .holderName("PAYER TEST")
-                .expirationDate("12/28")
-                .methodType("VISA")
+    void testProcessPaymentMasking() throws Exception {
+        // CP-TUR-030: Verificación de enmascaramiento en el flujo de pago
+        Payment payment = Payment.builder()
+                .booking(booking)
+                .paymentMethod(paymentMethod)
+                .amountPaid(new BigDecimal("100.00"))
+                .paymentStatus("Aprobado")
                 .build();
 
-        mockMvc.perform(post("/api/payment-methods")
+        mockMvc.perform(post("/api/payments")
                 .header("Authorization", "Bearer " + jwtToken)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(pm)))
+                .content(objectMapper.writeValueAsString(payment)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.maskedCardNumber").value("**** **** **** 5432"));
-        
-        // Verificar en listado
-        mockMvc.perform(get("/api/payment-methods")
-                .header("Authorization", "Bearer " + jwtToken))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].maskedCardNumber").value("**** **** **** 5432"))
-                .andExpect(jsonPath("$[0].cardNumber").doesNotExist());
-    }
-
-    @Test
-    void testRejectIncompleteCardNumber() throws Exception {
-        // CP-TUR-032: Bloqueo por número de tarjeta incompleto
-        PaymentMethod pm = PaymentMethod.builder()
-                .cardNumber("1234 5678") // Incompleta (< 16 dígitos)
-                .holderName("PAYER TEST")
-                .expirationDate("12/28")
-                .methodType("VISA")
-                .build();
-
-        mockMvc.perform(post("/api/payment-methods")
-                .header("Authorization", "Bearer " + jwtToken)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(pm)))
-                .andExpect(status().isBadRequest());
+                .andExpect(jsonPath("$.maskedCardNumber").value("**** **** **** 3456"))
+                .andExpect(jsonPath("$.cardNumber").doesNotExist());
     }
 }

@@ -83,7 +83,8 @@ public class AdminManagementFinalTest {
 
         mockMvc.perform(post("/api/auth/signup")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(signupRequest)));
+                .content(objectMapper.writeValueAsString(signupRequest)))
+                .andExpect(status().isOk());
 
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setEmail("admin@travel.com");
@@ -196,6 +197,7 @@ public class AdminManagementFinalTest {
         BookingRequest request = new BookingRequest();
         request.setFlightId(flight.getId());
         request.setDepartureDate(LocalDateTime.now().plusDays(1));
+        request.setReturnDate(LocalDateTime.now().plusDays(5));
 
         MvcResult res = mockMvc.perform(post("/api/flight-bookings")
                 .header("Authorization", "Bearer " + adminToken)
@@ -222,7 +224,7 @@ public class AdminManagementFinalTest {
         FlightBooking booking = flightBookingRepository.save(FlightBooking.builder()
                 .bookingCode("H-001")
                 .flight(flight)
-                .user(userRepository.findAll().get(0))
+                .user(userRepository.findByEmail("admin@travel.com").orElseThrow())
                 .status("Ejecutada")
                 .departureDate(LocalDateTime.now().minusDays(1))
                 .returnDate(LocalDateTime.now().minusDays(5))
