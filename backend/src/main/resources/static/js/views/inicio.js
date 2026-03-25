@@ -3,6 +3,46 @@ import { state } from '../state.js';
 import { toast } from '../ui.js';
 import { packageApi } from '../api.js';
 
+export const template = `
+<section id="view-inicio" class="view">
+  <section class="tc-hero-premium">
+    <div class="container has-text-centered">
+      <div class="hero-content-wrapper">
+        <h1 class="title is-1 hero-main-title">Libera tu espíritu <span class="accent-text">viajero</span></h1>
+        <p class="subtitle is-4 hero-sub-title">Experiencias curadas y destinos exóticos en un solo lugar.</p>
+        
+        <div class="tc-plane-center-stack">
+          <img id="plane-main" src="/assets/avion.png" alt="Avión TouristChain" class="tc-plane-hero tc-float" />
+        </div>
+
+        <button id="cta-reservar" class="button is-cta-premium is-large mt-6">¡DESPEGAR AHORA!</button>
+      </div>
+    </div>
+    <canvas id="bgCanvas"></canvas>
+  </section>
+
+  <!-- Featured Destinations Section -->
+  <section class="section py-4 tc-featured-section">
+    <div class="container">
+      <div class="has-text-left mb-6">
+        <h2 class="title is-2 section-title">Destinos <span class="accent-text">Destacados</span></h2>
+        <p class="subtitle is-5">Explora nuestras recomendaciones más populares para tu próximo viaje.</p>
+      </div>
+      <div id="home-destinos-grid" class="columns is-multiline">
+        <!-- Dinamically filled by inicio.js -->
+      </div>
+      <div class="has-text-centered mt-6">
+        <a href="#/catalogo" class="button is-link is-outlined is-rounded is-medium">Ver catálogo completo</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="has-text-centered" style="opacity:.6; margin:4rem 0 2rem;">
+    <small>© 2026 TouristChain — El Turismo Futurista</small>
+  </footer>
+</section>
+`;
+
 export async function initInicio() {
     console.log('Inicializando vista inicio...');
     

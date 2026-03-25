@@ -23,9 +23,16 @@ public class DataLoader implements CommandLineRunner {
     private final DestinationRepository destinationRepository;
     private final AccommodationRepository accommodationRepository;
     private final TransportRepository transportRepository;
+    private final com.travel.repository.RoleRepository roleRepository;
 
     @Override
     public void run(String... args) throws Exception {
+        if (roleRepository.count() == 0) {
+            roleRepository.save(com.travel.model.auth.Role.builder().name("ROLE_USER").build());
+            roleRepository.save(com.travel.model.auth.Role.builder().name("ROLE_PARTNER").build());
+            roleRepository.save(com.travel.model.auth.Role.builder().name("ROLE_ADMIN").build());
+            System.out.println("✅ Roles inicializados.");
+        }
         if (packageRepository.count() == 0) {
             seedData();
         }

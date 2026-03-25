@@ -192,3 +192,6 @@ export const state = {
     // Pub/Sub
     subscribe(fn) { listeners.add(fn); return () => listeners.delete(fn); }
 };
+
+// Global reference for debugging and consistency
+window.tcState = state;

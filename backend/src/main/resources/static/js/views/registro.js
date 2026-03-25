@@ -1,4 +1,62 @@
 // Vista: Registro
+export const template = `
+<section id="view-registro" class="view">
+  <div class="container">
+    <div class="glass-card tc-auth-card">
+      <div class="has-text-centered mb-5">
+        <img src="/assets/avion.png" alt="Logo" style="height:120px; filter:drop-shadow(0 15px 30px rgba(0,0,0,0.15));"/>
+      </div>
+      <h2 class="title is-2 has-text-centered mb-5">Crear cuenta</h2>
+      <form id="registerForm">
+        <div class="field">
+          <label class="label">Nombre completo</label>
+          <input type="text" id="reg-fullname" class="input" placeholder="Juan Pérez" required />
+        </div>
+        <div class="field">
+          <label class="label">Documento de identidad</label>
+          <input type="text" id="reg-document" class="input" placeholder="12345678" required />
+        </div>
+        <div class="field">
+          <label class="label">Correo electrónico</label>
+          <input type="email" id="reg-email" class="input" placeholder="ejemplo@gmail.com" required />
+        </div>
+        <div class="field">
+          <label class="label">Contraseña</label>
+          <input type="password" class="input" placeholder="********" required />
+        </div>
+        <div class="field">
+          <label class="label">Confirmar contraseña</label>
+          <input type="password" class="input" placeholder="********" required />
+        </div>
+        <div class="field">
+          <label class="label">Rol</label>
+          <div class="select is-fullwidth">
+            <select required>
+              <option selected disabled>Selecciona tu rol</option>
+              <option>Turista</option>
+              <option>Socio</option>
+              <option>Administrador</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field mt-4">
+          <label class="checkbox">
+            <input type="checkbox" required>
+            Acepto los <a href="#" class="has-text-link">términos y condiciones</a>
+          </label>
+        </div>
+        <button class="button is-cta-premium is-fullwidth mt-5">CREAR CUENTA</button>
+      </form>
+      <p class="has-text-centered mt-5">¿Ya tienes cuenta?
+        <a href="#/login" class="has-text-weight-bold is-underlined">Inicia sesión</a>
+      </p>
+      <p class="has-text-centered mt-4"><a href="#/inicio" class="is-size-7 opacity-7">Volver al inicio</a></p>
+    </div>
+  </div>
+</section>
+`;
+
 import { state } from '../state.js';
 import { toast } from '../ui.js';
 
@@ -6,7 +64,8 @@ export function initRegistro() {
     console.log('Inicializando registro...');
     
     const form = document.getElementById('registerForm');
-    if (!form) return;
+    if (!form || form.dataset.initialized) return;
+    form.dataset.initialized = 'true';
     
     const btn = form.querySelector('button');
     const inputs = form.querySelectorAll('input[required]');

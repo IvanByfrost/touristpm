@@ -28,7 +28,8 @@ async function apiFetch(endpoint, options = {}) {
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+  const finalUrl = `${API_BASE_URL}${endpoint}`;
+  const response = await fetch(finalUrl, {
     ...options,
     headers,
   });
@@ -97,4 +98,12 @@ export const partnerApi = {
 export const packageApi = {
   getAll: () => apiFetch('/packages'),
   getById: (id) => apiFetch(`/packages/${id}`),
+};
+
+/**
+ * Bookings API
+ */
+export const bookingApi = {
+  getUserBookings: () => apiFetch('/bookings/my'),
+  cancel: (id) => apiFetch(`/bookings/${id}/cancel`, { method: 'POST' }),
 };
