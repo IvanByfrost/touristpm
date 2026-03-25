@@ -1314,6 +1314,12 @@
                             <span>Configuración</span>
                         </a>
                     </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" onclick="showPanel('tests')">
+                            <i class="fas fa-vial sidebar-icon"></i>
+                            <span>Tests de Sistema</span>
+                        </a>
+                    </li>
                 </ul>
                 
                 <div class="mt-4">
@@ -1739,6 +1745,54 @@
                                 Guardar Configuración
                             </button>
                         </form>
+                    </div>
+                </div>
+
+                <!-- TESTS DE SISTEMA -->
+                <div class="panel" id="tests-panel">
+                    <div class="panel-header">
+                        <h1 class="panel-title">Tests de Sistema</h1>
+                        <p class="panel-subtitle">Ejecución y monitoreo de pruebas automatizadas</p>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-vial"></i></div>
+                            <div class="stat-value" id="total-tests-count">0</div>
+                            <div class="stat-label">Tests Disponibles</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="color: var(--success-green);"><i class="fas fa-check-circle"></i></div>
+                            <div class="stat-value" id="tests-passed-count">0</div>
+                            <div class="stat-label">Pasados</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="color: var(--danger-red);"><i class="fas fa-times-circle"></i></div>
+                            <div class="stat-value" id="tests-failed-count">0</div>
+                            <div class="stat-label">Fallidos</div>
+                        </div>
+                    </div>
+
+                    <div class="columns">
+                        <div class="column is-4">
+                            <div class="chart-box" style="height: 100%;">
+                                <h3 class="chart-title">Lista de Pruebas</h3>
+                                <div id="test-list" class="sidebar-nav" style="max-height: 480px; overflow-y: auto;">
+                                    <!-- Test items will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column is-8">
+                            <div class="chart-box" style="height: 100%; background: #0c0c0c; border: 1px solid #333;">
+                                <div class="flex justify-between items-center mb-3">
+                                    <h3 class="chart-title mb-0" style="color: #00d1b2; font-family: monospace;">> Terminal de Salida</h3>
+                                    <button class="btn btn-sm btn-outline" onclick="clearTerminal()" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">Limpiar</button>
+                                </div>
+                                <div id="test-terminal" style="font-family: 'Courier New', monospace; font-size: 0.9rem; color: #eee; height: 400px; overflow-y: auto; padding: 1rem; background: #1a1a1a; border-radius: 0.5rem; white-space: pre-wrap;">
+                                    [SISTEMA] Selecciona una prueba para comenzar...
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </main>
@@ -3905,6 +3959,140 @@
                 initializeCharts();
             }
         }, 1000);
+
+        // ============ SISTEMA DE TESTS ============
+        async function loadTests() {
+            const terminal = document.getElementById('test-terminal');
+            const listContainer = document.getElementById('test-list');
+            
+            try {
+                const response = await fetch('/api/admin/tests');
+                if (!response.ok) throw new Error('No se pudieron cargar los tests');
+                
+                const tests = await response.json();
+                AdminApp.availableTests = tests;
+                document.getElementById('total-tests-count').textContent = tests.length;
+                
+                listContainer.innerHTML = tests.map((test, index) => {
+                    const classId = `test-class-${index}`;
+                    return `
+                    <div class="sidebar-item" style="margin-bottom: 0.5rem; border-left: 3px solid var(--accent-blue);">
+                        <div class="flex items-center justify-between" style="padding: 0.5rem 1rem;">
+                            <a class="sidebar-link" style="padding: 0; flex-grow: 1;" onclick="toggleMethods('${classId}')">
+                                <i class="fas fa-chevron-right sidebar-icon" id="icon-${classId}"></i>
+                                <strong>${index + 1}. ${test.name}</strong>
+                            </a>
+                            <button class="btn btn-sm" onclick="runTest('${test.fullClassName}', null, this)" title="Ejecutar toda la clase" style="padding: 2px 5px; font-size: 0.7rem; background: rgba(255,255,255,0.1);">
+                                <i class="fas fa-play"></i>
+                            </button>
+                        </div>
+                        <div id="${classId}" style="display: none; padding-left: 2rem; margin-top: 5px;">
+                            ${test.methods.map((method, mIndex) => `
+                                <div class="flex items-center justify-between py-1 pr-2" style="font-size: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                    <span style="color: #ccc; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 80%;" title="${method.description}">
+                                        ${index + 1}.${mIndex + 1} ${method.description}
+                                    </span>
+                                    <button class="btn btn-sm" onclick="runTest('${test.fullClassName}', '${method.methodName}', this)" style="padding: 2px 5px; font-size: 0.6rem;">
+                                        <i class="fas fa-play-circle"></i>
+                                    </button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `}).join('');
+                
+            } catch (error) {
+                showNotification(error.message, 'error');
+                terminal.innerHTML += `\n[ERROR] ${error.message}`;
+            }
+        }
+
+        function toggleMethods(id) {
+            const el = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id);
+            if (el.style.display === 'none') {
+                el.style.display = 'block';
+                icon.className = 'fas fa-chevron-down sidebar-icon';
+            } else {
+                el.style.display = 'none';
+                icon.className = 'fas fa-chevron-right sidebar-icon';
+            }
+        }
+
+        async function runTest(testClass, testMethod, element) {
+            const terminal = document.getElementById('test-terminal');
+            
+            // UI state
+            let originalContent = '';
+            if (element) {
+                const icon = element.querySelector('i');
+                if (icon) {
+                    originalContent = icon.className;
+                    icon.className = 'fas fa-spinner fa-spin';
+                }
+                element.style.pointerEvents = 'none';
+                element.style.opacity = '0.7';
+            }
+            
+            const targetName = testMethod ? `${testClass}#${testMethod}` : testClass;
+            terminal.innerHTML += `\n\n[EJECUCIÓN] Iniciando prueba: ${targetName}...\n`;
+            terminal.innerHTML += `[COMANDO] mvn test -Dtest=${targetName}\n`;
+            terminal.scrollTop = terminal.scrollHeight;
+            
+            try {
+                const response = await fetch('/api/admin/tests/run', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ testClass, testMethod })
+                });
+                
+                const result = await response.json();
+                
+                // Colorize common Maven output (basic)
+                let styledOutput = result.output
+                    .replace(/\[INFO\]/g, '<span style="color: #00d1b2;">[INFO]</span>')
+                    .replace(/\[ERROR\]/g, '<span style="color: #ff3860;">[ERROR]</span>')
+                    .replace(/BUILD SUCCESS/g, '<span style="color: #23d160; font-weight: bold;">BUILD SUCCESS</span>')
+                    .replace(/BUILD FAILURE/g, '<span style="color: #ff3860; font-weight: bold;">BUILD FAILURE</span>');
+                
+                terminal.innerHTML += styledOutput;
+                
+                if (result.success) {
+                    terminal.innerHTML += `\n[SUCCESS] Finalizado con éxito. ✅`;
+                    document.getElementById('tests-passed-count').textContent = parseInt(document.getElementById('tests-passed-count').textContent) + 1;
+                    showNotification(`Prueba superada: ${testMethod || testClass}`, 'success');
+                } else {
+                    terminal.innerHTML += `\n[FAILED] Falló la prueba. Revisa el log. ❌`;
+                    document.getElementById('tests-failed-count').textContent = parseInt(document.getElementById('tests-failed-count').textContent) + 1;
+                    showNotification(`Prueba fallida: ${testMethod || testClass}`, 'error');
+                }
+                
+            } catch (error) {
+                terminal.innerHTML += `\n[ERROR] Comunicación fallida: ${error.message}`;
+                showNotification('Error de conexión', 'error');
+            } finally {
+                if (element) {
+                    const icon = element.querySelector('i');
+                    if (icon) icon.className = originalContent;
+                    element.style.pointerEvents = 'auto';
+                    element.style.opacity = '1';
+                }
+                terminal.scrollTop = terminal.scrollHeight;
+            }
+        }
+
+        function clearTerminal() {
+            document.getElementById('test-terminal').innerHTML = '[SISTEMA] Terminal limpia. Esperando comandos...';
+        }
+
+        // Integrar con showPanel
+        const originalShowPanel = showPanel;
+        showPanel = function(panelId) {
+            originalShowPanel(panelId);
+            if (panelId === 'tests') {
+                loadTests();
+            }
+        };
     </script>
 </body>
 </html>
