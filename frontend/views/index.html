@@ -1,0 +1,3321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TouristChain - El Mejor Turismo</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== COLORES AZULES ===== */
+        :root {
+            --primary-blue: #1a2a6c;
+            --secondary-blue: #2d4ba8;
+            --accent-blue: #4a6fff;
+            --light-blue: #b4d7f7;
+            --warm-accent: #ffd60a;
+            --dark-text: #111;
+            --glass-bg: rgba(255,255,255,.22);
+            
+            --button-bg: linear-gradient(to right, var(--primary-blue), var(--accent-blue));
+            --button-bg-hover: linear-gradient(to right, var(--accent-blue), var(--primary-blue));
+            --button-text: white;
+        }
+
+        body {
+            font-family: "Segoe UI", system-ui, sans-serif;
+            background: linear-gradient(135deg, var(--light-blue), var(--secondary-blue), var(--primary-blue));
+            color: var(--dark-text);
+            padding-top: 80px;
+            min-height: 100vh;
+            transition: background 0.5s ease, color 0.5s ease;
+            overflow-x: hidden;
+        }
+
+        /* ===== MODO CLARO ===== */
+        body.theme-cool {
+            background: linear-gradient(135deg, #ff4704b6, #d9ec09c9);
+            --button-bg: linear-gradient(to right, #ff6b35, #ffd60a);
+            --button-bg-hover: linear-gradient(to right, #ffd60a, #ff6b35);
+            --button-text: #1a2a6c;
+        }
+
+        /* ===== MODO OSCURO ===== */
+        body.theme-dark {
+            background: linear-gradient(135deg, #0a0a0a, #1a1a2e, #16213e);
+            color: #f0f0f0;
+            --primary-blue: #0f3460;
+            --secondary-blue: #1a1a2e;
+            --accent-blue: #4a6fff;
+            --light-blue: #1f4068;
+            --warm-accent: #ffd60a;
+            --dark-text: #f0f0f0;
+            --glass-bg: rgba(0,0,0,.3);
+            --button-bg: linear-gradient(to right, #0f3460, #4a6fff);
+            --button-bg-hover: linear-gradient(to right, #4a6fff, #0f3460);
+            --button-text: white;
+        }
+
+        /* ===== BOTONES MEJORADOS ===== */
+        .button.is-cta {
+            background: var(--button-bg);
+            border: none;
+            font-weight: 900;
+            color: var(--button-text);
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .button.is-cta:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+            background: var(--button-bg-hover);
+            color: var(--button-text);
+        }
+
+        /* ===== HEADER REORGANIZADO SEGÚN IMAGEN ===== */
+        .tc-header {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            right: 1rem;
+            z-index: 1000;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(26, 42, 108, 0.9);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 1rem;
+            border: 1px solid rgba(255,255,255,.2);
+            box-shadow: 0 8px 24px rgba(0,0,0,.18);
+            color: white;
+            transition: all 0.5s ease;
+        }
+
+        body.theme-cool .tc-header {
+            background: rgba(255, 107, 53, 0.9);
+        }
+
+        body.theme-dark .tc-header {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(255,255,255,.1);
+        }
+
+        .tc-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 900;
+            font-size: 1.5rem;
+            background: linear-gradient(to right, #ffd60a, #b4d7f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            transition: all 0.5s ease;
+        }
+
+        body.theme-cool .tc-logo {
+            background: linear-gradient(to right, #1a2a6c, #ff6b35);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        body.theme-dark .tc-logo {
+            background: linear-gradient(to right, #ffd60a, #4a6fff);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        /* === PARTE DEL AVION === */
+        .airplane-img {
+            height: 120px;
+            animation: fly-entrance 2s ease-in-out forwards, fly-continuous 3s infinite ease-in-out 2s;
+            transform-origin: center;
+        }
+
+        .logo-image {
+            height: 60px;
+            width: auto;
+        }
+
+        /* ANIMACIÓN DE ENTRADA */
+        @keyframes fly-entrance {
+            0% {
+                transform: translateX(100vw) translateY(-100px) rotate(4deg) scale(0.5);
+                opacity: 0;
+            }
+            70% {
+                transform: translateX(-50px) translateY(-20px) rotate(-10deg) scale(1.1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(0) translateY(0) rotate(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* ANIMACIÓN CONTINUA */
+        @keyframes fly-continuous {
+            0%, 100% { 
+                transform: translateX(0) rotate(0); 
+            }
+            25% { 
+                transform: translateX(50px) rotate(5deg); 
+            }
+            75% { 
+                transform: translateX(-50px) rotate(-5deg); 
+            }
+        }
+
+        .airplane-animation {
+            margin: 30px 0;
+            filter: drop-shadow(0 10px 18px rgba(0,0,0,.25));
+        }
+
+        /* ===== NAVEGACIÓN REORGANIZADA SEGÚN IMAGEN ===== */
+        .tc-nav {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-divider {
+            width: 2px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.3);
+            margin: 0 0.5rem;
+        }
+
+        .tc-nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            font-size: 0.95rem;
+        }
+
+        .tc-nav-link:hover {
+            background: rgba(255,255,255,.1);
+            transform: translateY(-1px);
+        }
+
+        body.theme-cool .tc-nav-link:hover {
+            background: rgba(26, 42, 108, 0.2);
+        }
+
+        body.theme-dark .tc-nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .tc-nav-link.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--warm-accent);
+        }
+
+        /* Botones especiales */
+        .socio-btn {
+            background: linear-gradient(to right, #ffd60a, #ff9500);
+            color: #1a2a6c !important;
+            font-weight: bold !important;
+            border: none;
+        }
+
+        .admin-btn {
+            background: linear-gradient(to right, #ff3860, #ff6b35);
+            color: white !important;
+            font-weight: bold !important;
+            border: none;
+        }
+
+        .cuenta-btn {
+            background: rgba(255, 255, 255, 0.15);
+            color: white !important;
+            font-weight: bold !important;
+            position: relative;
+        }
+
+        .cuenta-btn::after {
+            content: '▼';
+            font-size: 0.8em;
+            margin-left: 5px;
+        }
+
+        .cuenta-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .cuenta-dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background: rgba(26, 42, 108, 0.95);
+            backdrop-filter: blur(10px);
+            min-width: 200px;
+            border-radius: 0.5rem;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            z-index: 1001;
+            padding: 0.5rem 0;
+            border: 1px solid rgba(255,255,255,.2);
+            margin-top: 5px;
+        }
+
+        .cuenta-dropdown:hover .cuenta-dropdown-content {
+            display: block;
+        }
+
+        .dropdown-item {
+            color: white;
+            padding: 0.75rem 1rem;
+            text-decoration: none;
+            display: block;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(255,255,255,.1);
+            color: var(--warm-accent);
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.2);
+            margin: 0.5rem 0;
+        }
+
+        .tc-theme-toggle {
+            background: none;
+            border: 2px solid currentColor;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.2s ease;
+            color: white;
+        }
+
+        .tc-theme-toggle:hover {
+            transform: scale(1.1);
+            background: rgba(255,255,255,.1);
+        }
+
+        /* ===== CONTENEDOR PRINCIPAL ===== */
+        .main-container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* ===== TARJETAS GLASS MEJORADAS ===== */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 1rem;
+            border: 1px solid rgba(255,255,255,.2);
+            box-shadow: 0 8px 24px rgba(0,0,0,.18);
+            padding: 1.5rem;
+            height: 100%;
+            transition: transform 0.3s ease, background 0.5s ease;
+            color: var(--dark-text);
+        }
+
+        body.theme-dark .glass-card {
+            border: 1px solid rgba(255,255,255,.1);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* ===== HERO SECTION MEJORADA ===== */
+        .tc-hero {
+            text-align: center;
+            padding: 4rem 1rem;
+        }
+
+        .tc-hero h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary-blue), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInUp 1s ease-out 0.5s both;
+        }
+
+        body.theme-cool .tc-hero h1 {
+            background: linear-gradient(45deg, #ff6b35, #ffd60a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        body.theme-dark .tc-hero h1 {
+            background: linear-gradient(45deg, #4a6fff, #ffd60a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            color: var(--warm-accent);
+            font-weight: 600;
+            animation: fadeInUp 1s ease-out 0.8s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== SECCIONES ===== */
+        .section {
+            margin: 30px 0;
+            text-align: left;
+            animation: fadeInUp 1s ease-out 1.2s both;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: white;
+            background: linear-gradient(to right, var(--primary-blue), var(--accent-blue));
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 30px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            transition: all 0.5s ease;
+        }
+
+        body.theme-cool .section-title {
+            background: linear-gradient(to right, #ff6b35, #ffd60a);
+            color: #1a2a6c;
+        }
+
+        body.theme-dark .section-title {
+            background: linear-gradient(to right, #0f3460, #4a6fff);
+            color: white;
+        }
+
+        .section-content {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            padding: 0 10px;
+            color: white;
+            transition: color 0.5s ease;
+        }
+
+        body.theme-cool .section-content {
+            color: #1a2a6c;
+        }
+
+        body.theme-dark .section-content {
+            color: #f0f0f0;
+        }
+
+        .divider {
+            height: 3px;
+            background: linear-gradient(to right, transparent, var(--warm-accent), transparent);
+            margin: 30px 0;
+            animation: fadeInUp 1s ease-out 1.4s both;
+        }
+
+        /* ===== FEATURES ===== */
+        .features {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 30px 0;
+            animation: fadeInUp 1s ease-out 1.6s both;
+        }
+
+        .feature {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 10px;
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            transition: transform 0.3s ease, background 0.5s ease;
+            backdrop-filter: blur(10px);
+            color: white;
+        }
+
+        body.theme-cool .feature {
+            background: rgba(26, 42, 108, 0.1);
+            color: #1a2a6c;
+        }
+
+        body.theme-dark .feature {
+            background: rgba(0, 0, 0, 0.2);
+            color: #f0f0f0;
+        }
+
+        .feature:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        body.theme-cool .feature:hover {
+            background: rgba(26, 42, 108, 0.15);
+        }
+
+        body.theme-dark .feature:hover {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        /* ===== VIAJES Y RENTA DE CARROS ===== */
+        .viaje-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .viaje-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .viaje-imagen {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 1rem 1rem 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            transition: all 0.5s ease;
+            position: relative;
+        }
+
+        .viaje-imagen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(26, 42, 108, 0.7), rgba(74, 111, 255, 0.5));
+            border-radius: 1rem 1rem 0 0;
+        }
+
+        .viaje-imagen-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        body.theme-cool .viaje-imagen::before {
+            background: linear-gradient(45deg, rgba(255, 107, 53, 0.7), rgba(255, 214, 10, 0.5));
+        }
+
+        body.theme-dark .viaje-imagen::before {
+            background: linear-gradient(45deg, rgba(15, 52, 96, 0.7), rgba(74, 111, 255, 0.5));
+        }
+
+        /* ===== FORMULARIOS ===== */
+        .form-container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .field {
+            margin-bottom: 1.5rem;
+        }
+
+        .label {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            transition: color 0.5s ease;
+        }
+
+        body.theme-cool .label {
+            color: #1a2a6c;
+        }
+
+        body.theme-dark .label {
+            color: #f0f0f0;
+        }
+
+        .input {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid transparent;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            width: 100%;
+            transition: all 0.3s ease;
+            color: #333;
+        }
+
+        body.theme-dark .input {
+            background: rgba(255, 255, 255, 0.1);
+            color: #f0f0f0;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .input:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(74, 111, 255, 0.3);
+        }
+
+        body.theme-cool .input:focus {
+            border-color: #ff6b35;
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.3);
+        }
+
+        body.theme-dark .input:focus {
+            border-color: #4a6fff;
+            box-shadow: 0 0 0 3px rgba(74, 111, 255, 0.3);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .tc-nav {
+                gap: 1rem;
+            }
+            
+            .tc-nav-link {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+            }
+            
+            .nav-divider {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding-top: 140px;
+            }
+            
+            .tc-header {
+                top: 0.5rem;
+                left: 0.5rem;
+                right: 0.5rem;
+                padding: 0.75rem 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .tc-nav {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            
+            .tc-logo span {
+                display: none;
+            }
+            
+            .tc-hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.4rem;
+            }
+
+            .logo-image {
+                height: 45px;
+            }
+
+            .airplane-img {
+                height: 90px;
+            }
+
+            @keyframes fly-entrance {
+                0% {
+                    transform: translateX(-100vw) translateY(-50px) rotate(-45deg) scale(0.5);
+                    opacity: 0;
+                }
+                70% {
+                    transform: translateX(20px) translateY(-10px) rotate(5deg) scale(1.1);
+                    opacity: 1;
+                }
+                100% {
+                    transform: translateX(0) translateY(0) rotate(0) scale(1);
+                    opacity: 1;
+                }
+            }
+            
+            .cuenta-dropdown-content {
+                position: fixed;
+                top: 120px;
+                left: 1rem;
+                right: 1rem;
+                width: auto;
+            }
+        }
+
+        .view {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .view.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Footer mejorado */
+        footer {
+            text-align: center;
+            padding: 3rem 1rem;
+            opacity: 0.8;
+            margin-top: 2rem;
+            color: white;
+            transition: color 0.5s ease;
+        }
+
+        body.theme-cool footer {
+            color: #1a2a6c;
+        }
+
+        body.theme-dark footer {
+            color: #f0f0f0;
+        }
+
+        /* Enlace de registro */
+        .register-link {
+            color: var(--warm-accent);
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .register-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Botón CTA con animación */
+        .button.is-cta.is-large {
+            animation: fadeInUp 1s ease-out 2s both, pulse 2s infinite 3s;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* ===== CARRUSEL ===== */
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        
+        .carousel-slide {
+            min-width: 100%;
+            padding: 0 1rem;
+        }
+        
+        .carousel-nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 1rem;
+            gap: 0.5rem;
+        }
+        
+        .carousel-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .carousel-dot.active {
+            background: var(--warm-accent);
+            transform: scale(1.2);
+        }
+        
+        .carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+        
+        .carousel-arrow:hover {
+            background: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .carousel-arrow.prev {
+            left: 10px;
+        }
+        
+        .carousel-arrow.next {
+            right: 10px;
+        }
+        
+        /* Botón de favoritos */
+        .favorite-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 5;
+        }
+        
+        .favorite-btn:hover {
+            transform: scale(1.2);
+        }
+        
+        .favorite-btn.active {
+            color: #ff3860;
+        }
+        
+        /* Efecto reveal al hacer scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Validación de formularios */
+        .error-message {
+            color: #ff3860;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+        
+        .input.error {
+            border-color: #ff3860;
+        }
+        
+        .input.success {
+            border-color: #23d160;
+        }
+        
+        /* Vista Nosotros */
+        .team-member {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .team-member img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1rem;
+            border: 3px solid var(--accent-blue);
+        }
+        
+        body.theme-cool .team-member img {
+            border-color: #ff6b35;
+        }
+
+        body.theme-dark .team-member img {
+            border-color: #4a6fff;
+        }
+        
+        /* Vista Contacto */
+        .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .contact-item {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            padding: 1.5rem;
+        }
+        
+        .contact-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Checkbox en modo oscuro */
+        body.theme-dark .checkbox {
+            color: #f0f0f0;
+        }
+
+        /* ===== TEAM SECTION ===== */
+        .team-carousel-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1rem;
+            margin: 2rem 0;
+        }
+
+        .team-carousel-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .team-carousel-slide {
+            min-width: 100%;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .team-member-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            max-width: 300px;
+            transition: all 0.3s ease;
+        }
+
+        body.theme-dark .team-member-card {
+            background: rgba(30, 30, 40, 0.9);
+        }
+
+        body.theme-cool .team-member-card {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .team-member-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .team-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 1rem;
+            border: 4px solid var(--accent-blue);
+        }
+
+        body.theme-cool .team-avatar {
+            border-color: #ff6b35;
+        }
+
+        body.theme-dark .team-avatar {
+            border-color: #4a6fff;
+        }
+
+        /* ===== RENTA DE CARROS ===== */
+        .renta-package {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .renta-package:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .renta-package.basico {
+            border-left: 5px solid #23d160;
+        }
+
+        .renta-package.medio {
+            border-left: 5px solid #ffd60a;
+        }
+
+        .renta-package.black {
+            border-left: 5px solid #1a2a6c;
+        }
+        /* ===== CORREGIR RENTA EN MODO OSCURO ===== */
+        body.theme-dark .renta-package {
+            background: rgba(30, 40, 60, 0.8);  /* Fondo más oscuro y opaco */
+            color: #f0f0f0;  /* Texto claro */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body.theme-dark .renta-package:hover {
+            background: rgba(40, 50, 80, 0.9);
+        }
+
+        body.theme-cool .renta-package {
+            background: rgba(255, 255, 255, 0.9);
+            color: #1a2a6c;
+            border: 1px solid rgba(26, 42, 108, 0.2);
+        }
+
+        body.theme-cool .renta-package:hover {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        /* Asegurar que el texto dentro sea legible en todos los modos */
+        body.theme-dark .renta-package p,
+        body.theme-dark .renta-package strong,
+        body.theme-dark .renta-package h4 {
+            color: #ffffff !important;
+        }
+
+        body.theme-cool .renta-package p,
+        body.theme-cool .renta-package strong,
+        body.theme-cool .renta-package h4 {
+            color: #1a2a6c !important;
+        }
+
+        .renta-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 0.5rem;
+        }
+
+        /* ===== DASHBOARD MEJORADO ===== */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .dashboard-sidebar {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            height: fit-content;
+        }
+
+        .dashboard-menu {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+
+        .dashboard-menu li {
+            margin: 0.5rem 0;
+        }
+
+        .dashboard-menu a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: var(--dark-text);
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-menu a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--accent-blue);
+        }
+
+        .dashboard-menu a.active {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        .dashboard-content {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border-radius: 1rem;
+            padding: 2rem;
+        }
+
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--warm-accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* ===== COOKIES BANNER ===== */
+        .cookies-banner {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: var(--primary-blue);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            z-index: 9999;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: none;
+        }
+
+        .cookies-banner.show {
+            display: block;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* ===== NOTIFICACION TOAST ===== */
+        .notification-toast {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: var(--primary-blue);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 9999;
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+        }
+
+        .notification-toast.show {
+            transform: translateX(0);
+        }
+
+        .notification-toast.success {
+            background: #23d160;
+        }
+
+        .notification-toast.error {
+            background: #ff3860;
+        }
+
+        .notification-toast.warning {
+            background: #ffd60a;
+            color: #1a2a6c;
+        }
+
+        /* ===== TÉRMINOS Y CONDICIONES ===== */
+        .terms-container {
+            max-height: 500px;
+            overflow-y: auto;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .terms-section {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* ===== PAQUETES DE VIAJE ===== */
+        .package-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .package-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .package-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .package-card.popular {
+            border: 2px solid var(--warm-accent);
+            transform: scale(1.05);
+        }
+
+        .package-card.popular::before {
+            content: 'MÁS POPULAR';
+            position: absolute;
+            top: 10px;
+            right: -30px;
+            background: var(--warm-accent);
+            color: var(--primary-blue);
+            padding: 5px 40px;
+            transform: rotate(45deg);
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .package-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: var(--warm-accent);
+        }
+
+        .package-price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+
+        .package-features {
+            list-style: none;
+            padding: 0;
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+
+        .package-features li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .package-features li i {
+            color: var(--warm-accent);
+            margin-right: 0.5rem;
+        }
+
+        /* ===== IMÁGENES DE DESTINOS ===== */
+        .destination-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .destination-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+        }
+
+        .destination-name {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            z-index: 2;
+        }
+
+        /* ===== SECTIONS COMBINADAS ===== */
+        .combined-section {
+            margin: 3rem 0;
+        }
+
+        .combined-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .combined-tab {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 2rem;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .combined-tab.active {
+            background: var(--accent-blue);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .combined-tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .combined-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .combined-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER REORGANIZADO SEGÚN IMAGEN -->
+    <header class="tc-header">
+        <div class="tc-logo">
+            <span>TouristChain</span>
+        </div>
+        
+        <nav class="tc-nav">
+            <!-- Izquierda: Inicio, Viajes -->
+            <a href="#inicio" class="tc-nav-link active">Inicio</a>
+            <a href="#viajes" class="tc-nav-link">Viajes</a>
+            
+            <div class="nav-divider"></div>
+            
+            <!-- Centro: Nosotros, Contacto -->
+            <a href="#nosotros" class="tc-nav-link">Nosotros</a>
+            <a href="#contacto" class="tc-nav-link">Contacto</a>
+            
+            <div class="nav-divider"></div>
+            
+            <!-- Derecha: Ser Socio, Cuenta, Admin -->
+            <a href="socio.html" class="tc-nav-link socio-btn">Ser Socio</a>
+            
+            <div class="cuenta-dropdown">
+                <a href="#cuenta" class="tc-nav-link cuenta-btn">Mi Cuenta</a>
+                <div class="cuenta-dropdown-content">
+                    <a href="#login" class="dropdown-item">🔐 Ingresar</a>
+                    <a href="#registro" class="dropdown-item">📝 Registro</a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#dashboard" class="dropdown-item">👤 Mi Perfil</a>
+                    <a href="#forgot-password" class="dropdown-item">🔓 Olvidé Contraseña</a>
+                </div>
+            </div>
+            
+            <a href="admin.html" class="tc-nav-link admin-btn">Admin</a>
+            
+            <button class="tc-theme-toggle" id="theme-toggle" title="Cambiar tema">
+                ❄️
+            </button>
+        </nav>
+    </header>
+
+    <!-- VISTA INICIO -->
+    <section id="inicio" class="view active">
+        <div class="main-container">
+            <section class="tc-hero">
+                <h1 class="logo">TouristChain</h1>
+                <h2 class="subtitle">El Turismo Futurista</h2>
+                
+                <div class="airplane-animation">
+                    <img src="../public/assets/avion.png" alt="Avión" class="airplane-img">
+                </div>
+                
+                <div class="section">
+                    <h3 class="section-title">¿Qué es TouristChain?</h3>
+                    <p class="section-content">
+                        TouristChain revoluciona la industria del turismo mediante tecnología blockchain, 
+                        ofreciendo transparencia, seguridad y experiencias personalizadas para viajeros 
+                        de todo el mundo. Conectamos directamente a viajeros con proveedores de servicios 
+                        turísticos, eliminando intermediarios y reduciendo costos.
+                    </p>
+                </div>
+                
+                <div class="divider"></div>
+                
+                <div class="section">
+                    <h3 class="section-title">Nuestras Características</h3>
+                    <div class="features">
+                        <div class="feature">
+                            <div class="feature-icon">🔒</div>
+                            <h4>Seguridad</h4>
+                            <p>Transacciones seguras con tecnología blockchain</p>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">🌎</div>
+                            <h4>Global</h4>
+                            <p>Acceso a destinos y servicios en todo el mundo</p>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">⭐</div>
+                            <h4>Exclusivo</h4>
+                            <p>Experiencias únicas y personalizadas</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="divider"></div>
+
+                <!-- NUEVA SECCIÓN PARA SOCIOS -->
+                <div class="section">
+                    <h3 class="section-title">¿Quieres Ganar con Nosotros?</h3>
+                    <p class="section-content">
+                        Conviértete en socio de TouristChain y gana atractivas comisiones por cada 
+                        reserva que generes. Accede a herramientas exclusivas, soporte prioritario 
+                        y un programa de crecimiento diseñado para tu éxito.
+                    </p>
+                    
+                    <div class="socio-benefits">
+                        <div class="socio-benefit">
+                            <div class="feature-icon">💰</div>
+                            <h5>Hasta 20% Comisión</h5>
+                        </div>
+                        <div class="socio-benefit">
+                            <div class="feature-icon">📊</div>
+                            <h5>Panel Avanzado</h5>
+                        </div>
+                        <div class="socio-benefit">
+                            <div class="feature-icon">🎁</div>
+                            <h5>Bonos Especiales</h5>
+                        </div>
+                    </div>
+                    
+                    <a href="socio.html" class="button is-cta is-large">
+                        ¡Quiero Ser Socio!
+                    </a>
+                </div>
+                
+                <div class="divider"></div>
+                
+                <button class="button is-cta is-large" id="start-journey-btn">
+                    ¡EMPEZAR EL VIAJE!
+                </button>
+            </section>
+        </div>
+    </section>
+
+                <!-- NUEVA SECCIÓN PARA ADMINISTRADORES -->
+                <div class="section">
+                   <h3 class="section-title">Panel de Administración</h3>
+                   <p class="section-content">
+                      Acceso exclusivo para administradores del sistema. Gestiona usuarios, 
+                      controla reservas, configura paquetes y monitorea el rendimiento 
+                      de TouristChain.
+                    </p>
+    
+                    <div class="admin-features">
+                        <div class="feature">
+                            <div class="feature-icon">👥</div>
+                            <h5>Gestión de Usuarios</h5>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">📊</div>
+                            <h5>Reportes y Análisis</h5>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">⚙️</div>
+                            <h5>Configuración del Sistema</h5>
+                        </div>
+                    </div>
+    
+                    <div class="buttons is-centered mt-4">
+                        <a href="admin.html" class="button is-cta is-large admin-btn">
+                          <i class="fas fa-user-shield"></i> Acceder al Panel Admin
+                        </a>
+                        <a href="#admin-login" class="button is-light is-large">
+                         <i class="fas fa-sign-in-alt"></i> Login Admin
+                        </a>
+                    </div>
+                </div>
+
+    <!-- VISTA VIAJES -->
+    <section id="viajes" class="view">
+        <div class="main-container">
+            <h1 class="title is-2 has-text-centered mb-5" style="color: white;">✈️ Viajes y Renta de Carros</h1>
+            
+            <!-- Tabs para navegar -->
+            <div class="combined-tabs">
+                <button class="combined-tab active" data-target="viajes-content">✈️ Viajes</button>
+                <button class="combined-tab" data-target="renta-content">🚗 Renta de Carros</button>
+            </div>
+            
+            <!-- Contenido Viajes -->
+            <div id="viajes-content" class="combined-content active">
+                <!-- Carrusel de viajes -->
+                <div class="carousel-container">
+                    <div class="carousel-track" id="viajes-carousel-track"></div>
+                    <button class="carousel-arrow prev">&#10094;</button>
+                    <button class="carousel-arrow next">&#10095;</button>
+                    <div class="carousel-nav" id="viajes-carousel-nav"></div>
+                </div>
+                
+                <div class="divider"></div>
+                
+                <!-- Paquetes de viaje -->
+                <div class="section">
+                    <h3 class="section-title">Paquetes de Viaje</h3>
+                    
+                    <div class="package-comparison">
+                        <!-- Paquete Básico -->
+                        <div class="package-card">
+                            <div class="package-name">Paquete Básico</div>
+                            <div class="package-price">$799</div>
+                            <ul class="package-features">
+                                <li><i class="fas fa-check"></i> Vuelo ida y vuelta</li>
+                                <li><i class="fas fa-check"></i> Hotel 3 estrellas</li>
+                                <li><i class="fas fa-check"></i> Desayuno incluido</li>
+                                <li><i class="fas fa-check"></i> Traslados aeropuerto</li>
+                                <li><i class="fas fa-times"></i> Excursiones</li>
+                                <li><i class="fas fa-times"></i> Seguro de viaje</li>
+                            </ul>
+                            <button class="button is-cta is-fullwidth" data-type="viaje" data-package="basico">Seleccionar</button>
+                        </div>
+                        
+                        <!-- Paquete Medio -->
+                        <div class="package-card popular">
+                            <div class="package-name">Paquete Medio</div>
+                            <div class="package-price">$1,299</div>
+                            <ul class="package-features">
+                                <li><i class="fas fa-check"></i> Vuelo ida y vuelta</li>
+                                <li><i class="fas fa-check"></i> Hotel 4 estrellas</li>
+                                <li><i class="fas fa-check"></i> Todo incluido</li>
+                                <li><i class="fas fa-check"></i> Traslados aeropuerto</li>
+                                <li><i class="fas fa-check"></i> 2 excursiones</li>
+                                <li><i class="fas fa-times"></i> Seguro de viaje</li>
+                            </ul>
+                            <button class="button is-cta is-fullwidth" data-type="viaje" data-package="medio">Seleccionar</button>
+                        </div>
+                        
+                        <!-- Paquete Black -->
+                        <div class="package-card">
+                            <div class="package-name">Paquete Black</div>
+                            <div class="package-price">$2,499</div>
+                            <ul class="package-features">
+                                <li><i class="fas fa-check"></i> Vuelo primera clase</li>
+                                <li><i class="fas fa-check"></i> Hotel 5 estrellas</li>
+                                <li><i class="fas fa-check"></i> Todo incluido premium</li>
+                                <li><i class="fas fa-check"></i> Traslados privados</li>
+                                <li><i class="fas fa-check"></i> Todas las excursiones</li>
+                                <li><i class="fas fa-check"></i> Seguro de viaje premium</li>
+                            </ul>
+                            <button class="button is-cta is-fullwidth" data-type="viaje" data-package="black">Seleccionar</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="divider"></div>
+                
+                <!-- Destinos populares -->
+                <div class="section">
+                    <h3 class="section-title">Destinos Populares</h3>
+                    <div class="columns is-multiline" id="viajes-grid"></div>
+                </div>
+            </div>
+            
+            <!-- Contenido Renta de Carros -->
+            <div id="renta-content" class="combined-content">
+                <!-- Carrusel de vehículos -->
+                <div class="carousel-container">
+                    <div class="carousel-track" id="renta-carousel-track"></div>
+                    <button class="carousel-arrow prev">&#10094;</button>
+                    <button class="carousel-arrow next">&#10095;</button>
+                    <div class="carousel-nav" id="renta-carousel-nav"></div>
+                </div>
+                
+                <div class="divider"></div>
+                
+                <!-- Opciones de renta -->
+                <div class="section">
+                    <h3 class="section-title">Opciones de Renta</h3>
+                    
+                    <div class="columns is-multiline">
+                        <div class="column is-4">
+                            <div class="renta-package basico">
+                                <h4 class="title is-4">Básico</h4>
+                                <p><strong>Vehículo:</strong> Compacto (Toyota Yaris)</p>
+                                <p><strong>Precio:</strong> $35/día</p>
+                                <p><strong>Incluye:</strong> Seguro básico, KM ilimitados</p>
+                                <button class="button is-cta is-fullwidth mt-3" data-type="renta" data-package="basico">Rentar</button>
+                            </div>
+                        </div>
+                        
+                        <div class="column is-4">
+                            <div class="renta-package medio">
+                                <h4 class="title is-4">Medio</h4>
+                                <p><strong>Vehículo:</strong> SUV (Honda CR-V)</p>
+                                <p><strong>Precio:</strong> $65/día</p>
+                                <p><strong>Incluye:</strong> Seguro completo, GPS, WiFi</p>
+                                <button class="button is-cta is-fullwidth mt-3" data-type="renta" data-package="medio">Rentar</button>
+                            </div>
+                        </div>
+                        
+                        <div class="column is-4">
+                            <div class="renta-package black">
+                                <h4 class="title is-4">Black</h4>
+                                <p><strong>Vehículo:</strong> Premium (BMW X5)</p>
+                                <p><strong>Precio:</strong> $120/día</p>
+                                <p><strong>Incluye:</strong> Todo incluido, conductor opcional</p>
+                                <button class="button is-cta is-fullwidth mt-3" data-type="renta" data-package="black">Rentar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="divider"></div>
+                
+                <!-- Información de recogida y devolución -->
+                <div class="section">
+                    <h3 class="section-title">Información Importante</h3>
+                    
+                    <div class="renta-info">
+                        <div>
+                            <h5><i class="fas fa-map-marker-alt"></i> Lugares de Recogida</h5>
+                            <ul>
+                                <li>Aeropuerto Internacional</li>
+                                <li>Centro de la ciudad</li>
+                                <li>Estación de tren</li>
+                                <li>Hoteles asociados</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h5><i class="fas fa-clock"></i> Horarios</h5>
+                            <ul>
+                                <li>Recogida: 8:00 AM - 10:00 PM</li>
+                                <li>Devolución: 24 horas</li>
+                                <li>Servicio de emergencia: 24/7</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h5><i class="fas fa-file-contract"></i> Requisitos</h5>
+                            <ul>
+                                <li>Licencia de conducir válida</li>
+                                <li>Tarjeta de crédito</li>
+                                <li>Edad mínima: 21 años</li>
+                                <li>Seguro básico incluido</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VISTA NOSOTROS -->
+    <section id="nosotros" class="view">
+        <div class="main-container">
+            <h1 class="title is-2 has-text-centered mb-5" style="color: white;">👥 Sobre Nosotros</h1>
+            
+            <div class="glass-card reveal">
+                <h2 class="title is-3 mb-4" style="color: white;">Nuestra Misión</h2>
+                <p class="section-content">
+                    En TouristChain, creemos que viajar debe ser una experiencia segura, transparente y accesible para todos. 
+                    Utilizamos tecnología blockchain para eliminar intermediarios, reducir costos y garantizar transacciones seguras 
+                    entre viajeros y proveedores de servicios turísticos.
+                </p>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <!-- Carrusel del equipo -->
+            <div class="glass-card reveal">
+                <h2 class="title is-3 mb-4" style="color: white;">Nuestro Equipo</h2>
+                
+                <div class="team-carousel-container">
+                    <div class="team-carousel-track" id="team-carousel-track"></div>
+                    <button class="carousel-arrow prev team-prev">&#10094;</button>
+                    <button class="carousel-arrow next team-next">&#10095;</button>
+                    <div class="carousel-nav" id="team-carousel-nav"></div>
+                </div>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <div class="glass-card reveal">
+                <h2 class="title is-3 mb-4" style="color: white;">Nuestra Historia</h2>
+                <p class="section-content">
+                    TouristChain nació en 2023 de la visión de un grupo de entusiastas de los viajes y la tecnología 
+                    que identificaron las ineficiencias en la industria turística tradicional. Desde entonces, hemos 
+                    trabajado incansablemente para construir una plataforma que empodere tanto a viajeros como a 
+                    proveedores de servicios turísticos.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- VISTA CONTACTO -->
+    <section id="contacto" class="view">
+        <div class="main-container">
+            <h1 class="title is-2 has-text-centered mb-5" style="color: white;">📞 Contáctanos</h1>
+            
+            <div class="columns">
+                <div class="column is-6">
+                    <div class="glass-card">
+                        <h2 class="title is-3 mb-4" style="color: white;">Envíanos un Mensaje</h2>
+                        
+                        <form id="contact-form">
+                            <div class="field">
+                                <label class="label">Nombre completo</label>
+                                <div class="control">
+                                    <input class="input" type="text" placeholder="Tu nombre completo" id="contact-name">
+                                    <div class="error-message" id="name-error">Por favor ingresa tu nombre</div>
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <label class="label">Correo electrónico</label>
+                                <div class="control">
+                                    <input class="input" type="email" placeholder="ejemplo@gmail.com" id="contact-email">
+                                    <div class="error-message" id="email-error">Por favor ingresa un email válido</div>
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <label class="label">Asunto</label>
+                                <div class="control">
+                                    <input class="input" type="text" placeholder="Asunto del mensaje" id="contact-subject">
+                                    <div class="error-message" id="subject-error">Por favor ingresa un asunto</div>
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <label class="label">Mensaje</label>
+                                <div class="control">
+                                    <textarea class="input" rows="5" placeholder="Tu mensaje..." id="contact-message"></textarea>
+                                    <div class="error-message" id="message-error">Por favor ingresa un mensaje</div>
+                                </div>
+                            </div>
+
+                            <button class="button is-cta is-fullwidth mt-4" type="submit">
+                                📤 Enviar Mensaje
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="column is-6">
+                    <div class="glass-card">
+                        <h2 class="title is-3 mb-4" style="color: white;">Información de Contacto</h2>
+                        
+                        <div class="contact-info">
+                            <div class="contact-item">
+                                <div class="contact-icon">📍</div>
+                                <h3 class="title is-5">Dirección</h3>
+                                <p>Av. del Turismo 123<br>Barcelona, España</p>
+                            </div>
+                            
+                            <div class="contact-item">
+                                <div class="contact-icon">📞</div>
+                                <h3 class="title is-5">Teléfono</h3>
+                                <p>+34 123 456 789</p>
+                            </div>
+                            
+                            <div class="contact-item">
+                                <div class="contact-icon">✉️</div>
+                                <h3 class="title is-5">Email</h3>
+                                <p>info@touristchain.com</p>
+                            </div>
+                            
+                            <div class="contact-item">
+                                <div class="contact-icon">🕒</div>
+                                <h3 class="title is-5">Horario</h3>
+                                <p>Lun - Vie: 9:00 - 18:00</p>
+                            </div>
+                        </div>
+                        
+                        <div class="divider"></div>
+                        
+                        <h3 class="title is-4 mt-4" style="color: white;">Síguenos en Redes Sociales</h3>
+                        <div class="buttons is-centered mt-3">
+                            <button class="button is-light"> Facebook</button>
+                            <button class="button is-light"> Instagram</button>
+                            <button class="button is-light"> Twitter</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VISTAS DE CUENTA (LOGIN, REGISTRO, DASHBOARD) -->
+    
+    <!-- VISTA LOGIN -->
+    <section id="login" class="view">
+        <div class="form-container">
+            <div class="glass-card">
+                <div class="has-text-centered mb-4">
+                    <img src="../public/assets/avion.png" alt="Avión" style="height: 80px;">
+                </div>
+                <h2 class="title is-3 has-text-centered" style="color: white;">Iniciar Sesión</h2>
+                
+                <form id="login-form">
+                    <div class="field">
+                        <label class="label">Correo electrónico</label>
+                        <div class="control">
+                            <input class="input" type="email" placeholder="ejemplo@gmail.com" id="login-email">
+                            <div class="error-message" id="login-email-error">Por favor ingresa un email válido</div>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Contraseña</label>
+                        <div class="control">
+                            <input class="input" type="password" placeholder="********" id="login-password">
+                            <div class="error-message" id="login-password-error">Por favor ingresa tu contraseña</div>
+                        </div>
+                    </div>
+                    
+                    <div class="field">
+                        <label class="checkbox" style="color: white;">
+                            <input type="checkbox" id="remember-me">
+                            Recordar mi sesión
+                        </label>
+                    </div>
+
+                    <div class="field">
+                        <a href="#forgot-password" class="register-link">¿Olvidaste tu contraseña?</a>
+                    </div>
+
+                    <button class="button is-cta is-fullwidth mt-4" type="submit">
+                        Ingresar
+                    </button>
+                </form>
+
+                <p class="has-text-centered mt-4" style="color: white;">
+                    ¿No tienes cuenta? <a href="#registro" class="register-link">Regístrate aquí</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- VISTA REGISTRO -->
+    <section id="registro" class="view">
+        <div class="form-container">
+            <div class="glass-card">
+                <div class="has-text-centered mb-4">
+                    <img src="../public/assets/avion.png" alt="Avión" style="height: 80px;">
+                </div>
+                <h2 class="title is-3 has-text-centered" style="color: white;">Crear Cuenta</h2>
+                
+                <form id="register-form">
+                    <div class="field">
+                        <label class="label">Nombre completo</label>
+                        <div class="control">
+                            <input class="input" type="text" placeholder="Tu nombre completo" id="register-name">
+                            <div class="error-message" id="register-name-error">Por favor ingresa tu nombre completo</div>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Correo electrónico</label>
+                        <div class="control">
+                            <input class="input" type="email" placeholder="ejemplo@gmail.com" id="register-email">
+                            <div class="error-message" id="register-email-error">Por favor ingresa un email válido</div>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Contraseña</label>
+                        <div class="control">
+                            <input class="input" type="password" placeholder="Mínimo 8 caracteres" id="register-password">
+                            <div class="error-message" id="register-password-error">La contraseña debe tener al menos 8 caracteres</div>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Confirmar contraseña</label>
+                        <div class="control">
+                            <input class="input" type="password" placeholder="Repite tu contraseña" id="register-confirm">
+                            <div class="error-message" id="register-confirm-error">Las contraseñas no coinciden</div>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="checkbox" style="color: white;">
+                            <input type="checkbox" id="register-terms">
+                            Acepto los <a href="#terms" class="register-link">términos y condiciones</a>
+                        </label>
+                        <div class="error-message" id="register-terms-error">Debes aceptar los términos y condiciones</div>
+                    </div>
+                    
+                    <div class="field">
+                        <label class="checkbox" style="color: white;">
+                            <input type="checkbox" id="register-cookies">
+                            Acepto el uso de cookies
+                        </label>
+                    </div>
+
+                    <button class="button is-cta is-fullwidth mt-4" type="submit">
+                        Crear Cuenta
+                    </button>
+                </form>
+
+                <p class="has-text-centered mt-4" style="color: white;">
+                    ¿Ya tienes cuenta? <a href="#login" class="register-link">Inicia sesión aquí</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- VISTA DASHBOARD -->
+    <section id="dashboard" class="view">
+        <div class="main-container">
+            <h1 class="title is-2 has-text-centered mb-5" style="color: white;">👤 Mi Perfil</h1>
+            
+            <div class="dashboard-container">
+                <!-- Sidebar -->
+                <div class="dashboard-sidebar">
+                    <div class="has-text-centered mb-4">
+                        <div class="avatar-large">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Avatar" style="width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--accent-blue);">
+                        </div>
+                        <h3 class="title is-4 mt-2" id="user-name-display">Turismo Demo</h3>
+                        <p class="subtitle is-6" id="user-email-display">demo@touristchain.com</p>
+                    </div>
+                    
+                    <ul class="dashboard-menu">
+                        <li><a href="#dashboard-overview" class="active"><i class="fas fa-home"></i> Resumen</a></li>
+                        <li><a href="#dashboard-reservations"><i class="fas fa-calendar-alt"></i> Mis Reservas</a></li>
+                        <li><a href="#dashboard-favorites"><i class="fas fa-heart"></i> Favoritos</a></li>
+                        <li><a href="#dashboard-settings"><i class="fas fa-cog"></i> Configuración</a></li>
+                        <li><a href="#dashboard-payment"><i class="fas fa-credit-card"></i> Métodos de Pago</a></li>
+                        <li><a href="#dashboard-history"><i class="fas fa-history"></i> Historial</a></li>
+                    </ul>
+                    
+                    <button class="button is-cta is-fullwidth mt-4" id="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </button>
+                </div>
+                
+                <!-- Contenido principal -->
+                <div class="dashboard-content">
+                    <!-- Resumen -->
+                    <div id="dashboard-overview" class="dashboard-section active">
+                        <h2 class="title is-3 mb-4" style="color: white;">Resumen de tu Cuenta</h2>
+                        
+                        <div class="dashboard-stats">
+                            <div class="stat-card">
+                                <div class="stat-number" id="stat-reservations">0</div>
+                                <div class="stat-label">Reservas Activas</div>
+                            </div>
+                            
+                            <div class="stat-card">
+                                <div class="stat-number" id="stat-favorites">0</div>
+                                <div class="stat-label">Favoritos</div>
+                            </div>
+                            
+                            <div class="stat-card">
+                                <div class="stat-number">$<span id="stat-total">0</span></div>
+                                <div class="stat-label">Total Gastado</div>
+                            </div>
+                            
+                            <div class="stat-card">
+                                <div class="stat-number" id="stat-trips">0</div>
+                                <div class="stat-label">Viajes Realizados</div>
+                            </div>
+                        </div>
+                        
+                        <div class="divider"></div>
+                        
+                        <h3 class="title is-4 mt-4" style="color: white;">Actividad Reciente</h3>
+                        <div id="recent-activity" class="mt-3">
+                            <p class="has-text-centered">No hay actividad reciente</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Reservas -->
+                    <div id="dashboard-reservations" class="dashboard-section">
+                        <h2 class="title is-3 mb-4" style="color: white;">Mis Reservas</h2>
+                        <div id="user-reservations">
+                            <p class="has-text-centered">No tienes reservas aún</p>
+                        </div>
+                        <button class="button is-cta is-fullwidth mt-3" id="explore-trips-btn">
+                            Explorar futuros Viajes
+                        </button>
+                    </div>
+                    
+                    <!-- Favoritos -->
+                    <div id="dashboard-favorites" class="dashboard-section">
+                        <h2 class="title is-3 mb-4" style="color: white;">❤️ Mis Favoritos</h3>
+                        <div id="user-favorites">
+                            <p class="has-text-centered">No tienes favoritos</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Configuración -->
+                    <div id="dashboard-settings" class="dashboard-section">
+                        <h2 class="title is-3 mb-4" style="color: white;">Configuración de Cuenta</h2>
+                        <form id="settings-form">
+                            <div class="field">
+                                <label class="label">Nombre completo</label>
+                                <div class="control">
+                                    <input class="input" type="text" value="Turismo Demo" id="settings-name">
+                                </div>
+                            </div>
+                            
+                            <div class="field">
+                                <label class="label">Correo electrónico</label>
+                                <div class="control">
+                                    <input class="input" type="email" value="demo@touristchain.com" id="settings-email">
+                                </div>
+                            </div>
+                            
+                            <div class="field">
+                                <label class="label">Teléfono</label>
+                                <div class="control">
+                                    <input class="input" type="tel" placeholder="+34 123 456 789" id="settings-phone">
+                                </div>
+                            </div>
+                            
+                            <div class="field">
+                                <label class="label">Preferencias de notificación</label>
+                                <div class="control">
+                                    <label class="checkbox mr-3">
+                                        <input type="checkbox" checked> Email
+                                    </label>
+                                    <label class="checkbox mr-3">
+                                        <input type="checkbox"> SMS
+                                    </label>
+                                    <label class="checkbox">
+                                        <input type="checkbox" checked> Notificaciones push
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <button class="button is-cta mt-4" type="submit">Guardar Cambios</button>
+                        </form>
+                    </div>
+                    
+                    <!-- Métodos de Pago -->
+                    <div id="dashboard-payment" class="dashboard-section">
+                        <h2 class="title is-3 mb-4" style="color: white;">Métodos de Pago</h2>
+                        <div class="glass-card mb-3">
+                            <div class="columns is-vcentered">
+                                <div class="column is-1">
+                                    <i class="fab fa-cc-visa fa-2x"></i>
+                                </div>
+                                <div class="column is-8">
+                                    <p>Visa terminada en 4242</p>
+                                    <p class="is-size-7">Expira: 12/25</p>
+                                </div>
+                                <div class="column is-3 has-text-right">
+                                    <button class="button is-small is-danger">Eliminar</button>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="button is-cta">+ Agregar nuevo método de pago</button>
+                    </div>
+                    
+                    <!-- Historial -->
+                    <div id="dashboard-history" class="dashboard-section">
+                        <h2 class="title is-3 mb-4" style="color: white;">Historial de Actividad</h2>
+                        <div id="activity-history">
+                            <p class="has-text-centered">No hay historial disponible</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VISTA OLVIDO DE CONTRASEÑA -->
+    <section id="forgot-password" class="view">
+        <div class="form-container">
+            <div class="glass-card">
+                <div class="has-text-centered mb-4">
+                    <img src="../public/assets/avion.png" alt="Avión" style="height: 80px;">
+                </div>
+                <h2 class="title is-3 has-text-centered" style="color: white;">Recuperar Contraseña</h2>
+                
+                <form id="forgot-password-form">
+                    <div class="field">
+                        <label class="label">Correo electrónico</label>
+                        <div class="control">
+                            <input class="input" type="email" placeholder="ejemplo@gmail.com" id="forgot-email">
+                            <div class="error-message" id="forgot-email-error">Por favor ingresa un email válido</div>
+                        </div>
+                    </div>
+                    
+                    <p class="has-text-centered mb-4" style="color: white; font-size: 0.9rem;">
+                        Te enviaremos un enlace para restablecer tu contraseña a tu correo electrónico.
+                    </p>
+
+                    <button class="button is-cta is-fullwidth mt-4" type="submit">
+                        Enviar enlace de recuperación
+                    </button>
+                </form>
+
+                <p class="has-text-centered mt-4" style="color: white;">
+                    <a href="#login" class="register-link">Volver al inicio de sesión</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- VISTA TÉRMINOS Y CONDICIONES -->
+    <section id="terms" class="view">
+        <div class="main-container">
+            <div class="glass-card">
+                <h1 class="title is-2 has-text-centered mb-5" style="color: white;">📄 Términos y Condiciones</h1>
+                
+                <div class="terms-container">
+                    <div class="terms-section">
+                        <h3 class="title is-4" style="color: var(--warm-accent);">1. Aceptación de los Términos</h3>
+                        <p>Al acceder y utilizar TouristChain, aceptas cumplir con estos términos y condiciones.</p>
+                    </div>
+                    
+                    <div class="terms-section">
+                        <h3 class="title is-4" style="color: var(--warm-accent);">2. Uso del Servicio</h3>
+                        <p>Debes tener al menos 18 años para utilizar nuestros servicios. Eres responsable de mantener la confidencialidad de tu cuenta.</p>
+                    </div>
+                    
+                    <div class="terms-section">
+                        <h3 class="title is-4" style="color: var(--warm-accent);">3. Reservas y Pagos</h3>
+                        <p>Todas las reservas están sujetas a disponibilidad. Los precios pueden cambiar sin previo aviso.</p>
+                    </div>
+                    
+                    <div class="terms-section">
+                        <h3 class="title is-4" style="color: var(--warm-accent);">4. Política de Cancelación</h3>
+                        <p>Las cancelaciones deben realizarse con al menos 48 horas de anticipación para obtener un reembolso completo.</p>
+                    </div>
+                    
+                    <div class="terms-section">
+                        <h3 class="title is-4" style="color: var(--warm-accent);">5. Privacidad</h3>
+                        <p>Respetamos tu privacidad. Consulta nuestra política de privacidad para más información.</p>
+                    </div>
+                    
+                    <div class="terms-section">
+                        <h3 class="title is-4" style="color: var(--warm-accent);">6. Cookies</h3>
+                        <p>Utilizamos cookies para mejorar tu experiencia. Puedes gestionar tus preferencias de cookies en cualquier momento.</p>
+                    </div>
+                </div>
+                
+                <div class="field mt-4">
+                    <label class="checkbox" style="color: white;">
+                        <input type="checkbox" id="accept-terms">
+                        He leído y acepto los términos y condiciones
+                    </label>
+                </div>
+                
+                <div class="has-text-centered mt-4">
+                    <a href="#registro" class="button is-cta">Volver al Registro</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COOKIES BANNER -->
+    <div id="cookies-banner" class="cookies-banner">
+        <div class="columns is-vcentered">
+            <div class="column is-9">
+                <p>🍪 Utilizamos cookies para mejorar tu experiencia en TouristChain. Al continuar navegando, aceptas nuestro uso de cookies. <a href="#terms" class="register-link">Más información</a></p>
+            </div>
+            <div class="column is-3 has-text-right">
+                <button class="button is-cta mr-2" id="accept-cookies">Aceptar todas</button>
+                <button class="button is-light" id="reject-cookies">Rechazar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOTIFICACIÓN TOAST -->
+    <div id="notification-toast" class="notification-toast"></div>
+
+    <footer>
+        <small>© 2025 TouristChain — El Turismo Futurista</small>
+    </footer>
+
+    <script>
+        // ============================
+        // DATOS DEL SISTEMA
+        // ============================
+        const appState = {
+            currentSlide: 0,
+            currentTeamSlide: 0,
+            currentRentaSlide: 0,
+            favorites: JSON.parse(localStorage.getItem('touristchain-favorites')) || [],
+            reservations: JSON.parse(localStorage.getItem('touristchain-reservations')) || [],
+            user: JSON.parse(localStorage.getItem('touristchain-user')) || {
+                name: "Turismo Demo",
+                email: "demo@touristchain.com",
+                since: new Date().toLocaleDateString()
+            },
+            theme: localStorage.getItem('touristchain-theme') || 'default',
+            cookiesAccepted: localStorage.getItem('touristchain-cookies') || false
+        };
+
+        // Datos de viajes con imágenes
+        const viajes = [
+            {
+                id: 1,
+                nombre: "Paraíso en Cancún",
+                descripcion: "5 días en resorts todo incluido con playas de arena blanca",
+                precio: 1200,
+                duracion: "5 días",
+                imagen: "https://images.unsplash.com/photo-1511895426328-dc8714191300?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+                icono: "🏖️",
+                destacado: true,
+                paquetes: {
+                    basico: 799,
+                    medio: 1299,
+                    black: 2499
+                }
+            },
+            {
+                id: 2,
+                nombre: "Aventura en los Andes",
+                descripcion: "Trekking y cultura en la cordillera más larga del mundo",
+                precio: 800,
+                duracion: "7 días",
+                imagen: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+                icono: "⛰️",
+                destacado: true
+            },
+            {
+                id: 3,
+                nombre: "New York City",
+                descripcion: "Descubre la ciudad que nunca duerme - Broadway, museos y más",
+                precio: 1500,
+                duracion: "4 días",
+                imagen: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+                icono: "🏙️",
+                destacado: true
+            },
+            {
+                id: 4,
+                nombre: "Roma Clásica",
+                descripcion: "Historia viva en la Ciudad Eterna - Coliseo, Vaticano y más",
+                precio: 1100,
+                duracion: "6 días",
+                imagen: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+                icono: "🏛️"
+            },
+            {
+                id: 5,
+                nombre: "Tokio Futurista",
+                descripcion: "Tecnología y tradición en la capital japonesa",
+                precio: 1800,
+                duracion: "8 días",
+                imagen: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+                icono: "🗼"
+            },
+            {
+                id: 6,
+                nombre: "Playas de Bali",
+                descripcion: "Relax y cultura en las paradisíacas islas de Indonesia",
+                precio: 1400,
+                duracion: "7 días",
+                imagen: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+                icono: "🌴"
+            }
+        ];
+
+        // Datos de renta de carros
+        const rentaCarros = [
+            {
+                id: 1,
+                nombre: "Toyota Yaris",
+                tipo: "Compacto",
+                precio: 35,
+                imagen: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+                caracteristicas: ["5 personas", "Automático", "Aire acondicionado", "Bluetooth"]
+            },
+            {
+                id: 2,
+                nombre: "Honda CR-V",
+                tipo: "SUV",
+                precio: 65,
+                imagen: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+                caracteristicas: ["7 personas", "Automático", "GPS", "WiFi", "Cámara trasera"]
+            },
+            {
+                id: 3,
+                nombre: "BMW X5",
+                tipo: "Premium",
+                precio: 120,
+                imagen: "https://images.unsplash.com/photo-1555212697-194d092e3b8f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+                caracteristicas: ["5 personas", "Automático", "Pantalla táctil", "Asientos de cuero", "Sistema premium"]
+            }
+        ];
+
+        // Datos del equipo
+        const equipo = [
+            {
+                id: 1,
+                nombre: "CRISTIAN",
+                cargo: "CEO & Fundador",
+                descripcion: "JEFE FUNDADOR DE TOURISTCHAIN",
+                avatar: "https://randomuser.me/api/portraits/men/32.jpg"
+            },
+            {
+                id: 2,
+                nombre: "Carlos Pérez",
+                cargo: "COO",
+                descripcion: "CO-FUNDADOR DE TOURISTCHAIN",
+                avatar: "https://randomuser.me/api/portraits/men/44.jpg"
+            },
+            {
+                id: 3,
+                nombre: "LUCI NOVA",
+                cargo: "UX/UI Designer",
+                descripcion: "Diseño centrado en experiencia de usuario",
+                avatar: "https://randomuser.me/api/portraits/women/33.jpg"
+            },
+            {
+                id: 4,
+                nombre: "JOHAN CARRILLO",
+                cargo: "Backend Developer",
+                descripcion: "APIs seguras y alto rendimiento",
+                avatar: "https://randomuser.me/api/portraits/men/22.jpg"
+            },
+            {
+                id: 5,
+                nombre: "IVAN RUIZ",
+                cargo: "QA Engineer",
+                descripcion: "Automatización y control de calidad",
+                avatar: "https://randomuser.me/api/portraits/men/67.jpg"
+            }
+        ];
+
+        // ============================
+        // SISTEMA DE NOTIFICACIONES
+        // ============================
+        function showNotification(message, type = 'success') {
+            const toast = document.getElementById('notification-toast');
+            toast.textContent = message;
+            toast.className = `notification-toast ${type} show`;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // ============================
+        // FUNCIONES GENERALES
+        // ============================
+
+        // NAVEGACIÓN PRINCIPAL
+        function showView(viewId) {
+            document.querySelectorAll('.view').forEach(view => {
+                view.classList.remove('active');
+            });
+            
+            setTimeout(() => {
+                const targetView = document.getElementById(viewId);
+                if (targetView) {
+                    targetView.classList.add('active');
+                    
+                    // Actualizar navegación activa
+                    document.querySelectorAll('.tc-nav-link').forEach(link => {
+                        if (link.getAttribute('href') === `#${viewId}`) {
+                            link.classList.add('active');
+                        } else if (link.getAttribute('href').startsWith('#')) {
+                            link.classList.remove('active');
+                        }
+                    });
+                    
+                    // Inicializar componentes específicos de la vista
+                    if (viewId === 'viajes') {
+                        initViajesCarousel();
+                        initViajesGrid();
+                        initRentaCarousel();
+                        setupTabs();
+                    } else if (viewId === 'nosotros') {
+                        initTeamCarousel();
+                    } else if (viewId === 'dashboard') {
+                        updateDashboardStats();
+                        showDashboardSection('dashboard-overview');
+                    }
+                    
+                    // Verificar cookies
+                    if (!['login', 'registro', 'forgot-password', 'terms'].includes(viewId)) {
+                        checkCookies();
+                    }
+                }
+            }, 50);
+        }
+
+        // TABS DENTRO DE VISTAS
+        function setupTabs() {
+            document.querySelectorAll('.combined-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    
+                    // Ocultar todos los contenidos
+                    document.querySelectorAll('.combined-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    // Desactivar todas las tabs
+                    document.querySelectorAll('.combined-tab').forEach(t => {
+                        t.classList.remove('active');
+                    });
+                    
+                    // Mostrar contenido y activar tab
+                    document.getElementById(targetId).classList.add('active');
+                    this.classList.add('active');
+                    
+                    // Reiniciar carruseles si es necesario
+                    if (targetId === 'viajes-content') {
+                        initViajesCarousel();
+                    } else if (targetId === 'renta-content') {
+                        initRentaCarousel();
+                    }
+                });
+            });
+        }
+
+        // DASHBOARD NAVEGACIÓN
+        function showDashboardSection(sectionId) {
+            document.querySelectorAll('.dashboard-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.dashboard-menu a').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            document.getElementById(sectionId).classList.add('active');
+            document.querySelector(`.dashboard-menu a[href="#${sectionId}"]`).classList.add('active');
+        }
+
+        // TEMA
+        function toggleTheme() {
+            document.body.classList.remove('theme-cool', 'theme-dark');
+            
+            if (appState.theme === 'default') {
+                document.body.classList.add('theme-cool');
+                appState.theme = 'cool';
+                document.getElementById('theme-toggle').textContent = '☀️';
+            } else if (appState.theme === 'cool') {
+                document.body.classList.add('theme-dark');
+                appState.theme = 'dark';
+                document.getElementById('theme-toggle').textContent = '🌙';
+            } else {
+                appState.theme = 'default';
+                document.getElementById('theme-toggle').textContent = '❄️';
+            }
+            
+            localStorage.setItem('touristchain-theme', appState.theme);
+        }
+
+        // COOKIES
+        function checkCookies() {
+            if (!appState.cookiesAccepted) {
+                setTimeout(() => {
+                    document.getElementById('cookies-banner').classList.add('show');
+                }, 2000);
+            }
+        }
+
+        function acceptCookies() {
+            appState.cookiesAccepted = true;
+            localStorage.setItem('touristchain-cookies', 'true');
+            document.getElementById('cookies-banner').classList.remove('show');
+            showNotification('Preferencias de cookies guardadas');
+        }
+
+        function rejectCookies() {
+            appState.cookiesAccepted = false;
+            localStorage.setItem('touristchain-cookies', 'false');
+            document.getElementById('cookies-banner').classList.remove('show');
+            showNotification('Cookies rechazadas');
+        }
+
+        // ============================
+        // CARRUSELES
+        // ============================
+
+        // Carrusel de viajes
+        function initViajesCarousel() {
+            const carouselTrack = document.getElementById('viajes-carousel-track');
+            const carouselNav = document.getElementById('viajes-carousel-nav');
+            
+            if (!carouselTrack) return;
+            
+            const destacados = viajes.filter(viaje => viaje.destacado);
+            
+            carouselTrack.innerHTML = '';
+            carouselNav.innerHTML = '';
+            
+            destacados.forEach((viaje, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'carousel-slide';
+                slide.innerHTML = `
+                    <div class="glass-card viaje-card">
+                        <button class="favorite-btn" data-id="${viaje.id}" data-type="viaje">🤍</button>
+                        <div class="viaje-imagen" style="background-image: url('${viaje.imagen}')">
+                            <div class="viaje-imagen-content">
+                                <h3 class="title is-3" style="color: white;">${viaje.nombre}</h3>
+                                <p style="color: white;">${viaje.descripcion}</p>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <strong class="is-size-3">$${viaje.precio}</strong>
+                            <span class="is-size-6"> / ${viaje.duracion}</span>
+                        </div>
+                        <button class="button is-cta is-fullwidth mt-3" data-id="${viaje.id}" data-type="viaje">
+                            🛒 Reservar
+                        </button>
+                    </div>
+                `;
+                carouselTrack.appendChild(slide);
+                
+                const dot = document.createElement('div');
+                dot.className = `carousel-dot ${index === 0 ? 'active' : ''}`;
+                dot.setAttribute('data-index', index);
+                dot.addEventListener('click', () => goToSlide(index, 'viajes'));
+                carouselNav.appendChild(dot);
+            });
+            
+            updateFavoriteButtons();
+            setupReservationButtons();
+            
+            const container = document.getElementById('viajes-content');
+            if (container) {
+                container.querySelectorAll('.carousel-arrow').forEach(arrow => {
+                    if (!arrow.classList.contains('team-prev') && !arrow.classList.contains('team-next')) {
+                        arrow.addEventListener('click', function() {
+                            if (this.classList.contains('prev')) {
+                                prevSlide('viajes');
+                            } else {
+                                nextSlide('viajes');
+                            }
+                        });
+                    }
+                });
+            }
+            
+            document.querySelectorAll('.favorite-btn[data-type="viaje"]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const viajeId = parseInt(this.getAttribute('data-id'));
+                    toggleFavorite(viajeId, 'viaje');
+                });
+            });
+        }
+
+        // Carrusel de renta
+        function initRentaCarousel() {
+            const carouselTrack = document.getElementById('renta-carousel-track');
+            const carouselNav = document.getElementById('renta-carousel-nav');
+            
+            if (!carouselTrack) return;
+            
+            carouselTrack.innerHTML = '';
+            carouselNav.innerHTML = '';
+            
+            rentaCarros.forEach((carro, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'carousel-slide';
+                slide.innerHTML = `
+                    <div class="glass-card">
+                        <div class="viaje-imagen" style="background-image: url('${carro.imagen}')">
+                            <div class="viaje-imagen-content">
+                                <h3 class="title is-3" style="color: white;">${carro.nombre}</h3>
+                                <p style="color: white;">${carro.tipo} • $${carro.precio}/día</p>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <h4 class="title is-5">Características:</h4>
+                            <ul>
+                                ${carro.caracteristicas.map(c => `<li>✓ ${c}</li>`).join('')}
+                            </ul>
+                        </div>
+                        <button class="button is-cta is-fullwidth mt-3" data-id="${carro.id}" data-type="renta">
+                            🚗 Rentar ahora
+                        </button>
+                    </div>
+                `;
+                carouselTrack.appendChild(slide);
+                
+                const dot = document.createElement('div');
+                dot.className = `carousel-dot ${index === 0 ? 'active' : ''}`;
+                dot.setAttribute('data-index', index);
+                dot.addEventListener('click', () => goToSlide(index, 'renta'));
+                carouselNav.appendChild(dot);
+            });
+            
+            setupRentaButtons();
+        }
+
+        // Carrusel del equipo
+        function initTeamCarousel() {
+            const carouselTrack = document.getElementById('team-carousel-track');
+            const carouselNav = document.getElementById('team-carousel-nav');
+            
+            if (!carouselTrack) return;
+            
+            carouselTrack.innerHTML = '';
+            carouselNav.innerHTML = '';
+            
+            equipo.forEach((miembro, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'team-carousel-slide';
+                slide.innerHTML = `
+                    <div class="team-member-card">
+                        <img src="${miembro.avatar}" alt="${miembro.nombre}" class="team-avatar">
+                        <h3 class="title is-4">${miembro.nombre}</h3>
+                        <span class="tag is-primary" style="background: var(--accent-blue); color: white; margin: 0.5rem 0;">${miembro.cargo}</span>
+                        <p>${miembro.descripcion}</p>
+                        <div class="mt-3">
+                            <a href="#" class="button is-small is-light"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="button is-small is-light"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="button is-small is-light"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                `;
+                carouselTrack.appendChild(slide);
+                
+                const dot = document.createElement('div');
+                dot.className = `carousel-dot ${index === 0 ? 'active' : ''}`;
+                dot.setAttribute('data-index', index);
+                dot.addEventListener('click', () => goToSlide(index, 'team'));
+                carouselNav.appendChild(dot);
+            });
+            
+            document.querySelector('.team-prev').addEventListener('click', () => prevSlide('team'));
+            document.querySelector('.team-next').addEventListener('click', () => nextSlide('team'));
+        }
+
+        // Funciones genéricas para carruseles
+        function goToSlide(index, type) {
+            let track, dots, stateVar;
+            
+            switch(type) {
+                case 'viajes':
+                    track = document.getElementById('viajes-carousel-track');
+                    dots = document.querySelectorAll('#viajes-carousel-nav .carousel-dot');
+                    appState.currentSlide = index;
+                    stateVar = 'currentSlide';
+                    break;
+                case 'renta':
+                    track = document.getElementById('renta-carousel-track');
+                    dots = document.querySelectorAll('#renta-carousel-nav .carousel-dot');
+                    appState.currentRentaSlide = index;
+                    stateVar = 'currentRentaSlide';
+                    break;
+                case 'team':
+                    track = document.getElementById('team-carousel-track');
+                    dots = document.querySelectorAll('#team-carousel-nav .carousel-dot');
+                    appState.currentTeamSlide = index;
+                    stateVar = 'currentTeamSlide';
+                    break;
+            }
+            
+            if (track) {
+                track.style.transform = `translateX(-${index * 100}%)`;
+                
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === index);
+                });
+            }
+        }
+
+        function nextSlide(type) {
+            let totalSlides, currentSlide, stateVar;
+            
+            switch(type) {
+                case 'viajes':
+                    totalSlides = document.querySelectorAll('#viajes-carousel-track .carousel-slide').length;
+                    currentSlide = appState.currentSlide;
+                    stateVar = 'currentSlide';
+                    break;
+                case 'renta':
+                    totalSlides = document.querySelectorAll('#renta-carousel-track .carousel-slide').length;
+                    currentSlide = appState.currentRentaSlide;
+                    stateVar = 'currentRentaSlide';
+                    break;
+                case 'team':
+                    totalSlides = document.querySelectorAll('#team-carousel-track .team-carousel-slide').length;
+                    currentSlide = appState.currentTeamSlide;
+                    stateVar = 'currentTeamSlide';
+                    break;
+            }
+            
+            const nextIndex = (currentSlide + 1) % totalSlides;
+            appState[stateVar] = nextIndex;
+            goToSlide(nextIndex, type);
+        }
+
+        function prevSlide(type) {
+            let totalSlides, currentSlide, stateVar;
+            
+            switch(type) {
+                case 'viajes':
+                    totalSlides = document.querySelectorAll('#viajes-carousel-track .carousel-slide').length;
+                    currentSlide = appState.currentSlide;
+                    stateVar = 'currentSlide';
+                    break;
+                case 'renta':
+                    totalSlides = document.querySelectorAll('#renta-carousel-track .carousel-slide').length;
+                    currentSlide = appState.currentRentaSlide;
+                    stateVar = 'currentRentaSlide';
+                    break;
+                case 'team':
+                    totalSlides = document.querySelectorAll('#team-carousel-track .team-carousel-slide').length;
+                    currentSlide = appState.currentTeamSlide;
+                    stateVar = 'currentTeamSlide';
+                    break;
+            }
+            
+            const prevIndex = (currentSlide - 1 + totalSlides) % totalSlides;
+            appState[stateVar] = prevIndex;
+            goToSlide(prevIndex, type);
+        }
+
+        // ============================
+        // GRID DE VIAJES
+        // ============================
+        function initViajesGrid() {
+            const viajesGrid = document.getElementById('viajes-grid');
+            if (!viajesGrid) return;
+            
+            viajesGrid.innerHTML = '';
+            
+            viajes.forEach(viaje => {
+                const column = document.createElement('div');
+                column.className = 'column is-12-tablet is-6-desktop is-4-widescreen';
+                column.innerHTML = `
+                    <div class="glass-card viaje-card">
+                        <button class="favorite-btn" data-id="${viaje.id}" data-type="viaje">🤍</button>
+                        <div class="viaje-imagen" style="background-image: url('${viaje.imagen}')">
+                            <div class="viaje-imagen-content">
+                                <h4 style="color: white; font-weight: bold;">${viaje.nombre}</h4>
+                            </div>
+                        </div>
+                        <h3 class="title is-5 mt-3">${viaje.nombre}</h3>
+                        <p>${viaje.descripcion}</p>
+                        <div class="mt-3">
+                            <strong class="is-size-3">$${viaje.precio}</strong>
+                            <span class="is-size-6"> / ${viaje.duracion}</span>
+                        </div>
+                        <button class="button is-cta is-fullwidth mt-3" data-id="${viaje.id}" data-type="viaje">
+                            🛒 Reservar
+                        </button>
+                    </div>
+                `;
+                viajesGrid.appendChild(column);
+            });
+            
+            updateFavoriteButtons();
+            setupReservationButtons();
+            
+            document.querySelectorAll('.favorite-btn[data-type="viaje"]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const viajeId = parseInt(this.getAttribute('data-id'));
+                    toggleFavorite(viajeId, 'viaje');
+                });
+            });
+        }
+
+        // ============================
+        // SISTEMA DE FAVORITOS
+        // ============================
+        function toggleFavorite(itemId, type) {
+            const index = appState.favorites.findIndex(fav => fav.id === itemId && fav.type === type);
+            
+            if (index === -1) {
+                appState.favorites.push({ id: itemId, type: type });
+                showNotification('Agregado a favoritos ❤️');
+            } else {
+                appState.favorites.splice(index, 1);
+                showNotification('Eliminado de favoritos', 'warning');
+            }
+            
+            localStorage.setItem('touristchain-favorites', JSON.stringify(appState.favorites));
+            updateFavoriteButtons();
+            updateFavoritesDisplay();
+            updateDashboardStats();
+        }
+
+        function updateFavoriteButtons() {
+            document.querySelectorAll('.favorite-btn[data-id]').forEach(btn => {
+                const itemId = parseInt(btn.getAttribute('data-id'));
+                const type = btn.getAttribute('data-type');
+                const isFavorite = appState.favorites.some(fav => fav.id === itemId && fav.type === type);
+                
+                if (isFavorite) {
+                    btn.classList.add('active');
+                    btn.textContent = '❤️';
+                } else {
+                    btn.classList.remove('active');
+                    btn.textContent = '🤍';
+                }
+            });
+        }
+
+        // ============================
+        // SISTEMA DE RESERVAS
+        // ============================
+        function setupReservationButtons() {
+            document.querySelectorAll('.viaje-card .button.is-cta[data-type="viaje"]').forEach(button => {
+                button.addEventListener('click', function() {
+                    const viajeId = parseInt(this.getAttribute('data-id'));
+                    const viaje = viajes.find(v => v.id === viajeId);
+                    
+                    if (viaje) {
+                        const existingReservation = appState.reservations.find(r => r.id === viajeId && r.tipo === 'viaje');
+                        
+                        if (!existingReservation) {
+                            appState.reservations.push({
+                                id: viaje.id,
+                                nombre: viaje.nombre,
+                                precio: viaje.precio,
+                                fecha: new Date().toLocaleDateString(),
+                                tipo: 'viaje'
+                            });
+                            
+                            localStorage.setItem('touristchain-reservations', JSON.stringify(appState.reservations));
+                            showNotification('¡Viaje agregado al carrito! 🛒');
+                            updateReservationsDisplay();
+                            updateDashboardStats();
+                        } else {
+                            showNotification('Ya tienes este viaje en tus reservas', 'warning');
+                        }
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.button.is-cta[data-type="viaje"][data-package]').forEach(button => {
+                button.addEventListener('click', function() {
+                    const packageType = this.getAttribute('data-package');
+                    let precio = 0;
+                    let nombre = '';
+                    
+                    switch(packageType) {
+                        case 'basico':
+                            precio = 799;
+                            nombre = 'Paquete Básico de Viaje';
+                            break;
+                        case 'medio':
+                            precio = 1299;
+                            nombre = 'Paquete Medio de Viaje';
+                            break;
+                        case 'black':
+                            precio = 2499;
+                            nombre = 'Paquete Black de Viaje';
+                            break;
+                    }
+                    
+                    appState.reservations.push({
+                        id: Date.now(),
+                        nombre: nombre,
+                        precio: precio,
+                        fecha: new Date().toLocaleDateString(),
+                        tipo: 'paquete'
+                    });
+                    
+                    localStorage.setItem('touristchain-reservations', JSON.stringify(appState.reservations));
+                    showNotification(`¡${nombre} agregado al carrito! 🛒`);
+                    updateReservationsDisplay();
+                    updateDashboardStats();
+                });
+            });
+        }
+
+        function setupRentaButtons() {
+            document.querySelectorAll('.button.is-cta[data-type="renta"]').forEach(button => {
+                button.addEventListener('click', function() {
+                    const carroId = parseInt(this.getAttribute('data-id'));
+                    const carro = rentaCarros.find(c => c.id === carroId);
+                    
+                    if (carro) {
+                        appState.reservations.push({
+                            id: carro.id,
+                            nombre: `Renta: ${carro.nombre}`,
+                            precio: carro.precio * 3, // 3 días por defecto
+                            fecha: new Date().toLocaleDateString(),
+                            tipo: 'renta'
+                        });
+                        
+                        localStorage.setItem('touristchain-reservations', JSON.stringify(appState.reservations));
+                        showNotification('¡Vehículo reservado! 🚗');
+                        updateReservationsDisplay();
+                        updateDashboardStats();
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.button.is-cta[data-type="renta"][data-package]').forEach(button => {
+                button.addEventListener('click', function() {
+                    const packageType = this.getAttribute('data-package');
+                    let precio = 0;
+                    let nombre = '';
+                    let dias = 3;
+                    
+                    switch(packageType) {
+                        case 'basico':
+                            precio = 35 * dias;
+                            nombre = 'Renta Básico - Toyota Yaris';
+                            break;
+                        case 'medio':
+                            precio = 65 * dias;
+                            nombre = 'Renta Medio - Honda CR-V';
+                            break;
+                        case 'black':
+                            precio = 120 * dias;
+                            nombre = 'Renta Black - BMW X5';
+                            break;
+                    }
+                    
+                    appState.reservations.push({
+                        id: Date.now(),
+                        nombre: nombre,
+                        precio: precio,
+                        fecha: new Date().toLocaleDateString(),
+                        tipo: 'renta'
+                    });
+                    
+                    localStorage.setItem('touristchain-reservations', JSON.stringify(appState.reservations));
+                    showNotification(`¡${nombre} agregado al carrito! 🚗`);
+                    updateReservationsDisplay();
+                    updateDashboardStats();
+                });
+            });
+        }
+
+        // ============================
+        // DASHBOARD
+        // ============================
+        function updateDashboardStats() {
+            document.getElementById('stat-reservations').textContent = appState.reservations.length;
+            document.getElementById('stat-favorites').textContent = appState.favorites.length;
+            
+            const totalGastado = appState.reservations.reduce((sum, res) => sum + res.precio, 0);
+            document.getElementById('stat-total').textContent = totalGastado;
+            
+            const viajesRealizados = appState.reservations.filter(r => r.tipo === 'viaje' || r.tipo === 'paquete').length;
+            document.getElementById('stat-trips').textContent = viajesRealizados;
+            
+            document.getElementById('user-name-display').textContent = appState.user.name;
+            document.getElementById('user-email-display').textContent = appState.user.email;
+        }
+
+        function updateReservationsDisplay() {
+            const reservationsContainer = document.getElementById('user-reservations');
+            if (!reservationsContainer) return;
+            
+            if (appState.reservations.length === 0) {
+                reservationsContainer.innerHTML = '<p class="has-text-centered">No tienes reservas aún</p>';
+                return;
+            }
+            
+            let reservationsHTML = '<div class="columns is-multiline">';
+            
+            appState.reservations.forEach((reservation, index) => {
+                reservationsHTML += `
+                    <div class="column is-12">
+                        <div class="glass-card">
+                            <div class="columns is-vcentered">
+                                <div class="column is-8">
+                                    <h4 class="title is-5">${reservation.nombre}</h4>
+                                    <p><i class="fas fa-calendar"></i> Reservado el: ${reservation.fecha}</p>
+                                    <p><i class="fas fa-tag"></i> Tipo: ${reservation.tipo === 'viaje' ? 'Viaje' : 
+                                      reservation.tipo === 'paquete' ? 'Paquete' : 'Renta de carro'}</p>
+                                </div>
+                                <div class="column is-4 has-text-right">
+                                    <strong class="is-size-4">$${reservation.precio}</strong>
+                                    <button class="button is-small is-danger mt-2 cancel-reservation" data-index="${index}">
+                                        <i class="fas fa-trash"></i> Cancelar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            reservationsHTML += '</div>';
+            reservationsContainer.innerHTML = reservationsHTML;
+            
+            reservationsContainer.querySelectorAll('.cancel-reservation').forEach(button => {
+                button.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    
+                    if (index !== -1) {
+                        appState.reservations.splice(index, 1);
+                        localStorage.setItem('touristchain-reservations', JSON.stringify(appState.reservations));
+                        updateReservationsDisplay();
+                        updateDashboardStats();
+                        showNotification('Reserva cancelada');
+                    }
+                });
+            });
+        }
+
+        function updateFavoritesDisplay() {
+            const favoritesContainer = document.getElementById('user-favorites');
+            if (!favoritesContainer) return;
+            
+            if (appState.favorites.length === 0) {
+                favoritesContainer.innerHTML = '<p class="has-text-centered">No tienes favoritos</p>';
+                return;
+            }
+            
+            let favoritesHTML = '<div class="columns is-multiline">';
+            
+            appState.favorites.forEach(fav => {
+                let item;
+                if (fav.type === 'viaje') {
+                    item = viajes.find(v => v.id === fav.id);
+                    if (item) {
+                        favoritesHTML += `
+                            <div class="column is-6">
+                                <div class="glass-card">
+                                    <div class="viaje-imagen" style="background-image: url('${item.imagen}'); height: 150px;">
+                                        <div class="viaje-imagen-content">
+                                            <h4 style="color: white; font-size: 1rem;">${item.nombre}</h4>
+                                        </div>
+                                    </div>
+                                    <h4 class="title is-5 mt-2">${item.nombre}</h4>
+                                    <p>${item.descripcion.substring(0, 60)}...</p>
+                                    <div class="mt-2">
+                                        <strong class="is-size-4">$${item.precio}</strong>
+                                        <span class="is-size-6"> / ${item.duracion}</span>
+                                    </div>
+                                    <button class="button is-cta is-fullwidth mt-2" data-id="${item.id}" data-type="viaje">
+                                        🛒 Reservar
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            });
+            
+            favoritesHTML += '</div>';
+            favoritesContainer.innerHTML = favoritesHTML;
+            
+            setupReservationButtons();
+        }
+
+        // ============================
+        // FORMULARIOS
+        // ============================
+        function initFormValidation() {
+            // Formulario de contacto
+            const contactForm = document.getElementById('contact-form');
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    let isValid = true;
+                    const name = document.getElementById('contact-name');
+                    const email = document.getElementById('contact-email');
+                    const subject = document.getElementById('contact-subject');
+                    const message = document.getElementById('contact-message');
+                    
+                    if (!name.value.trim()) {
+                        name.classList.add('error');
+                        isValid = false;
+                    } else {
+                        name.classList.remove('error');
+                    }
+                    
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!email.value.trim() || !emailRegex.test(email.value)) {
+                        email.classList.add('error');
+                        isValid = false;
+                    } else {
+                        email.classList.remove('error');
+                    }
+                    
+                    if (!subject.value.trim()) {
+                        subject.classList.add('error');
+                        isValid = false;
+                    } else {
+                        subject.classList.remove('error');
+                    }
+                    
+                    if (!message.value.trim()) {
+                        message.classList.add('error');
+                        isValid = false;
+                    } else {
+                        message.classList.remove('error');
+                    }
+                    
+                    if (isValid) {
+                        showNotification('¡Mensaje enviado con éxito! Te contactaremos pronto.');
+                        contactForm.reset();
+                    }
+                });
+            }
+            
+            // Login
+            const loginForm = document.getElementById('login-form');
+            if (loginForm) {
+                loginForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const email = document.getElementById('login-email').value;
+                    const password = document.getElementById('login-password').value;
+                    
+                    if (email && password) {
+                        appState.user = {
+                            name: email.split('@')[0],
+                            email: email,
+                            since: new Date().toLocaleDateString()
+                        };
+                        localStorage.setItem('touristchain-user', JSON.stringify(appState.user));
+                        
+                        showNotification('¡Inicio de sesión exitoso!');
+                        showView('dashboard');
+                        loginForm.reset();
+                    }
+                });
+            }
+            
+            // Registro
+            const registerForm = document.getElementById('register-form');
+            if (registerForm) {
+                registerForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const name = document.getElementById('register-name').value;
+                    const email = document.getElementById('register-email').value;
+                    const password = document.getElementById('register-password').value;
+                    const confirm = document.getElementById('register-confirm').value;
+                    const terms = document.getElementById('register-terms').checked;
+                    
+                    if (name && email && password && confirm && terms) {
+                        if (password !== confirm) {
+                            showNotification('Las contraseñas no coinciden', 'error');
+                            return;
+                        }
+                        
+                        if (password.length < 8) {
+                            showNotification('La contraseña debe tener al menos 8 caracteres', 'error');
+                            return;
+                        }
+                        
+                        appState.user = {
+                            name: name,
+                            email: email,
+                            since: new Date().toLocaleDateString()
+                        };
+                        localStorage.setItem('touristchain-user', JSON.stringify(appState.user));
+                        
+                        showNotification('¡Cuenta creada con éxito!');
+                        showView('dashboard');
+                        registerForm.reset();
+                    } else {
+                        showNotification('Por favor completa todos los campos y acepta los términos', 'error');
+                    }
+                });
+            }
+            
+            // Olvido de contraseña
+            const forgotForm = document.getElementById('forgot-password-form');
+            if (forgotForm) {
+                forgotForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const email = document.getElementById('forgot-email').value;
+                    
+                    if (email) {
+                        showNotification('¡Enlace de recuperación enviado a tu correo!');
+                        showView('login');
+                        forgotForm.reset();
+                    }
+                });
+            }
+            
+            // Configuración
+            const settingsForm = document.getElementById('settings-form');
+            if (settingsForm) {
+                settingsForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const name = document.getElementById('settings-name').value;
+                    const email = document.getElementById('settings-email').value;
+                    
+                    if (name && email) {
+                        appState.user.name = name;
+                        appState.user.email = email;
+                        localStorage.setItem('touristchain-user', JSON.stringify(appState.user));
+                        
+                        showNotification('¡Cambios guardados exitosamente!');
+                        updateDashboardStats();
+                    }
+                });
+            }
+        }
+
+        // ============================
+        // INICIALIZACIÓN DE LA APLICACIÓN
+        // ============================
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navegación principal
+            document.querySelectorAll('.tc-nav-link[href^="#"]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    showView(targetId);
+                });
+            });
+            
+            // Navegación del dropdown de cuenta
+            document.querySelectorAll('.dropdown-item[href^="#"]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    showView(targetId);
+                });
+            });
+
+            // Tema
+            if (appState.theme === 'cool') {
+                document.body.classList.add('theme-cool');
+                document.getElementById('theme-toggle').textContent = '☀️';
+            } else if (appState.theme === 'dark') {
+                document.body.classList.add('theme-dark');
+                document.getElementById('theme-toggle').textContent = '🌙';
+            } else {
+                document.getElementById('theme-toggle').textContent = '❄️';
+            }
+
+            document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+
+            // Botones principales
+            document.getElementById('start-journey-btn').addEventListener('click', function() {
+                showView('viajes');
+            });
+
+            document.getElementById('explore-trips-btn').addEventListener('click', function() {
+                showView('viajes');
+            });
+
+            // Cerrar sesión
+            document.getElementById('logout-btn').addEventListener('click', function() {
+                showNotification('Sesión cerrada exitosamente');
+                showView('login');
+            });
+
+            // Cookies
+            document.getElementById('accept-cookies').addEventListener('click', acceptCookies);
+            document.getElementById('reject-cookies').addEventListener('click', rejectCookies);
+
+            // Navegación del dashboard
+            document.querySelectorAll('.dashboard-menu a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const sectionId = this.getAttribute('href').substring(1);
+                    showDashboardSection(sectionId);
+                });
+            });
+
+            // Formularios
+            initFormValidation();
+
+            // Efecto reveal al hacer scroll
+            const reveals = document.querySelectorAll('.reveal');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            reveals.forEach(reveal => observer.observe(reveal));
+
+            // Inicializar datos del dashboard
+            updateDashboardStats();
+            updateReservationsDisplay();
+            updateFavoritesDisplay();
+            
+            // Mostrar vista inicial
+            if (window.location.hash) {
+                const viewId = window.location.hash.substring(1);
+                showView(viewId);
+            } else {
+                showView('inicio');
+            }
+
+            console.log('✅ TouristChain - Sitio Principal cargado correctamente!');
+            console.log('📊 Estado inicial:', appState);
+        });
+    </script>
+</body>
+</html>
