@@ -53,7 +53,7 @@ export const template = `
               <div class="field">
                 <label class="label">Precio Total ($)</label>
                 <div class="control">
-                  <input id="edit-package-price" class="input" type="number" step="0.01" required>
+                  <input id="edit-package-price" class="input" type="number" step="0.001" min="0" required>
                 </div>
               </div>
             </div>
@@ -195,7 +195,7 @@ export const template = `
           <div class="field">
             <label class="label">Total a Cobrar ($)</label>
             <div class="control">
-              <input id="admin-booking-amount" class="input" type="number" step="0.01" required>
+              <input id="admin-booking-amount" class="input" type="number" step="0.001" min="0" required>
             </div>
           </div>
           <div class="field">
@@ -290,7 +290,7 @@ export const template = `
               <div class="field">
                 <label class="label">Precio Base ($)</label>
                 <div class="control">
-                  <input id="edit-dest-price" class="input" type="number" step="0.01" required>
+                  <input id="edit-dest-price" class="input" type="number" step="0.001" min="0" required>
                 </div>
               </div>
             </div>
@@ -298,7 +298,7 @@ export const template = `
               <div class="field">
                 <label class="label">Impuestos (%)</label>
                 <div class="control">
-                  <input id="edit-dest-tax" class="input" type="number" step="0.1" required>
+                  <input id="edit-dest-tax" class="input" type="number" step="0.001" min="0" required>
                 </div>
               </div>
             </div>
@@ -470,9 +470,9 @@ async function renderDestinations(container) {
                         <tr>
                             <td><strong>${d.name}</strong></td>
                             <td>${d.country}</td>
-                            <td>$${base.toLocaleString()}</td>
-                            <td><span class="tag is-warning is-light">${tax}%</span></td>
-                            <td><strong class="has-text-link">$${total.toLocaleString()}</strong></td>
+                            <td>$${base.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                            <td><span class="tag is-warning is-light">${tax.toLocaleString(undefined, {minimumFractionDigits: 1})}%</span></td>
+                            <td><strong class="has-text-link">$${total.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</strong></td>
                             <td>
                                 <button class="button is-small is-link is-light" onclick="openEditDestinationModal('${d.destinationId}')">Ajustar Tarifa</button>
                             </td>

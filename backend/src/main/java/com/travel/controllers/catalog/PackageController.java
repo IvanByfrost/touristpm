@@ -6,6 +6,7 @@ import com.travel.repository.catalog.PackageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.math.RoundingMode;
 
 import java.util.List;
 import java.util.UUID;
@@ -35,14 +36,20 @@ public class PackageController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Package> update(@PathVariable UUID id, @RequestBody Package details) {
+    public ResponseEntity<?> update(@PathVariable UUID id, @RequestBody Package details) {
         return packageRepository.findById(id).map(p -> {
             p.setName(details.getName());
             p.setDescription(details.getDescription());
             p.setDestination(details.getDestination());
             p.setAccommodation(details.getAccommodation());
             p.setTransport(details.getTransport());
-            p.setTotalPrice(details.getTotalPrice());
+            
+            if (details.getTotalPrice() != null) {
+                if (details.getTotalPrice().compareTo(java.math.BigDecimal.ZERO) <= 0) {
+                    return ResponseEntity.badRequest().body("El valor de la tarifa debe ser superior a cero");
+                }
+                p.setTotalPrice(details.getTotalPrice().setScale(2, RoundingMode.HALF_UP));
+            }
             p.setAvailableSlots(details.getAvailableSlots());
             p.setIsActive(details.getIsActive());
             p.setStartDate(details.getStartDate());

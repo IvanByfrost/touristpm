@@ -9,6 +9,7 @@ import com.travel.repository.AuditLogRepository;
 import java.time.LocalDateTime;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import java.math.RoundingMode;
 
 import java.util.List;
 import java.util.UUID;
@@ -39,15 +40,23 @@ public class DestinationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Destination> update(@PathVariable UUID id, @RequestBody Destination details) {
+    public ResponseEntity<?> update(@PathVariable UUID id, @RequestBody Destination details) {
         return destinationRepository.findById(id).map(dest -> {
             java.math.BigDecimal oldPrice = dest.getBasePrice();
             
             dest.setName(details.getName());
             dest.setCountry(details.getCountry());
             dest.setDescription(details.getDescription());
-            dest.setBasePrice(details.getBasePrice());
-            dest.setTaxPercentage(details.getTaxPercentage());
+            
+            if (details.getBasePrice() != null) {
+                if (details.getBasePrice().compareTo(java.math.BigDecimal.ZERO) <= 0) {
+                    return ResponseEntity.badRequest().body("El valor de la tarifa debe ser superior a cero");
+                }
+                dest.setBasePrice(details.getBasePrice().setScale(2, RoundingMode.HALF_UP));
+            }
+            if (details.getTaxPercentage() != null) {
+                dest.setTaxPercentage(details.getTaxPercentage().setScale(2, RoundingMode.HALF_UP));
+            }
             
             Destination saved = destinationRepository.save(dest);
 

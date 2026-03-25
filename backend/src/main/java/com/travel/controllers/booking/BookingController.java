@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import com.travel.repository.AuditLogRepository;
 import java.time.LocalDateTime;
+import java.math.RoundingMode;
 
 import java.util.Collections;
 import java.util.List;
@@ -87,7 +88,12 @@ public class BookingController {
         Booking booking = new Booking();
         booking.setUser(user);
         booking.setBookingType(request.getBookingType());
-        booking.setTotalAmount(request.getTotalAmount());
+        if (request.getTotalAmount() != null) {
+            if (request.getTotalAmount().compareTo(java.math.BigDecimal.ZERO) <= 0) {
+                return ResponseEntity.badRequest().body("El valor de la tarifa debe ser superior a cero");
+            }
+            booking.setTotalAmount(request.getTotalAmount().setScale(2, RoundingMode.HALF_UP));
+        }
         booking.setDetails(request.getDetails());
         
         // CP-TUR-018: Validación de coherencia en fechas
@@ -159,11 +165,16 @@ public class BookingController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Booking> update(@PathVariable UUID id, @RequestBody Booking details) {
+    public ResponseEntity<?> update(@PathVariable UUID id, @RequestBody Booking details) {
         return bookingRepository.findById(id).map(booking -> {
             booking.setStatus(details.getStatus());
             booking.setDetails(details.getDetails());
-            booking.setTotalAmount(details.getTotalAmount());
+            if (details.getTotalAmount() != null) {
+                if (details.getTotalAmount().compareTo(java.math.BigDecimal.ZERO) <= 0) {
+                    return ResponseEntity.badRequest().body("El valor de la tarifa debe ser superior a cero");
+                }
+                booking.setTotalAmount(details.getTotalAmount().setScale(2, RoundingMode.HALF_UP));
+            }
             return ResponseEntity.ok(bookingRepository.save(booking));
         }).orElse(ResponseEntity.notFound().build());
     }
