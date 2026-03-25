@@ -50,6 +50,7 @@ public class WebSecurityConfig {
               .requestMatchers("/api/auth/**").permitAll()
               .requestMatchers("/api/test/**").permitAll()
               .requestMatchers("/api/packages/**").permitAll()
+              .requestMatchers("/api/bookings/search").permitAll()
               .anyRequest().authenticated()
         );
 

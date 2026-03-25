@@ -17,7 +17,6 @@ body {
     font-family: 'Outfit', sans-serif;
     background: #ffffff;
     color: var(--primary-blue);
-    padding-top: 80px;
     min-height: 100vh;
     overflow-x: hidden;
 }
@@ -95,7 +94,7 @@ body::before {
 
 .tc-plane-hero {
     height: 180px;
-    filter: drop-shadow(0 25px 35px rgba(0,0,0,0.15));
+    filter: drop-shadow(0 25px 35px rgba(0, 0, 0, 0.15));
     z-index: 2;
 }
 
@@ -132,8 +131,15 @@ body::before {
 
 /* ===== ANIMATIONS ===== */
 @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
 }
 
 .tc-float {
@@ -141,13 +147,24 @@ body::before {
 }
 
 @keyframes takeoff1 {
-    0% { transform: translateY(0) rotate(0); }
-    100% { transform: translateY(-30px) rotate(-5deg) scale(1.1); }
+    0% {
+        transform: translateY(0) rotate(0);
+    }
+
+    100% {
+        transform: translateY(-30px) rotate(-5deg) scale(1.1);
+    }
 }
 
 @keyframes takeoff2 {
-    0% { transform: translateY(-30px) rotate(-5deg) scale(1.1); }
-    100% { transform: translateY(-200vh) translateX(100vw) rotate(-25deg) scale(0.3); opacity: 0; }
+    0% {
+        transform: translateY(-30px) rotate(-5deg) scale(1.1);
+    }
+
+    100% {
+        transform: translateY(-200vh) translateX(100vw) rotate(-25deg) scale(0.3);
+        opacity: 0;
+    }
 }
 
 .takeoff-step1 {
@@ -174,6 +191,7 @@ body::before {
         opacity: 0;
         transform: translateY(25px) scale(0.98);
     }
+
     100% {
         opacity: 1;
         transform: translateY(0) scale(1);
@@ -181,7 +199,9 @@ body::before {
 }
 
 /* ===== PREMIUM FORMS & FIELDS ===== */
-.input, .textarea, .select select {
+.input,
+.textarea,
+.select select {
     background-color: #f8fafc !important;
     border: 1px solid rgba(0, 0, 0, 0.08) !important;
     border-radius: 12px !important;
@@ -193,7 +213,9 @@ body::before {
     transition: all 0.3s ease !important;
 }
 
-.input:focus, .textarea:focus, .select select:focus {
+.input:focus,
+.textarea:focus,
+.select select:focus {
     background-color: #ffffff !important;
     border-color: var(--accent-blue) !important;
     box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1) !important;
@@ -229,9 +251,9 @@ body::before {
     border: none !important;
 }
 
-.tc-login-card .title, 
-.tc-login-card .label, 
-.tc-login-card p, 
+.tc-login-card .title,
+.tc-login-card .label,
+.tc-login-card p,
 .tc-login-card a {
     color: white !important;
 }
@@ -333,7 +355,7 @@ body::before {
     background: #10b981;
     color: white;
     font-weight: 700;
-    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
     transform: translateX(150%);
     transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -350,7 +372,9 @@ body::before {
     background: #3b82f6;
 }
 
-.opacity-7 { opacity: 0.7; }
+.opacity-7 {
+    opacity: 0.7;
+}
 
 /* ===== CATALOGUE PREMIUM REDESIGN ===== */
 .tc-catalogo-hero {
@@ -379,8 +403,8 @@ body::before {
     font-size: 1.2rem;
     background: rgba(255, 255, 255, 0.8) !important;
     backdrop-filter: blur(8px);
-    border: 1px solid rgba(255,255,255,0.5) !important;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    border: 1px solid rgba(255, 255, 255, 0.5) !important;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
 }
 
@@ -421,7 +445,7 @@ body::before {
 .combined-tab.active {
     background: white;
     color: var(--primary-blue);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .combined-content {
@@ -434,6 +458,13 @@ body::before {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

@@ -74,6 +74,16 @@ export const authApi = {
 };
 
 /**
+ * User API
+ */
+export const userApi = {
+  update: (id, userData) => apiFetch(`/users/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(userData),
+  }),
+};
+
+/**
  * Partners API
  */
 export const partnerApi = {
@@ -104,6 +114,22 @@ export const packageApi = {
  * Bookings API
  */
 export const bookingApi = {
-  getUserBookings: () => apiFetch('/bookings/my'),
+  getAll: () => apiFetch('/bookings'),
+  searchByEmail: (email) => apiFetch(`/bookings/search?email=${encodeURIComponent(email)}`),
+  create: (bookingData) => apiFetch('/bookings', {
+    method: 'POST',
+    body: JSON.stringify(bookingData),
+  }),
   cancel: (id) => apiFetch(`/bookings/${id}/cancel`, { method: 'POST' }),
+};
+
+/**
+ * Admin API (Tests & Management)
+ */
+export const adminApi = {
+  getTests: () => apiFetch('/admin/tests'),
+  runTest: (testClass, testMethod = '') => apiFetch('/admin/tests/run', {
+    method: 'POST',
+    body: JSON.stringify({ testClass, testMethod }),
+  }),
 };

@@ -1,6 +1,5 @@
 import { authApi } from './api.js';
 
-// TouristChain — State (tema + usuario + carrito) con persistencia
 const LS_THEME = "tc_theme";
 const LS_USER = "tc_user";
 const LS_CART = "tc_cart";
@@ -11,7 +10,6 @@ const notify = () => listeners.forEach(fn => fn(state));
 
 function applyThemeToDOM(theme) {
     document.body.classList.toggle("theme-cool", theme === "cool");
-    // Actualizar ícono del toggle
     const toggle = document.getElementById('theme-toggle');
     if (toggle) {
         toggle.textContent = theme === 'cool' ? '☀️' : '🌙';
@@ -23,15 +21,15 @@ function initialState() {
     let user = null;
     let cart = [];
     let favorites = [];
-    
-    try { 
-        user = JSON.parse(localStorage.getItem(LS_USER) || "null"); 
+
+    try {
+        user = JSON.parse(localStorage.getItem(LS_USER) || "null");
         cart = JSON.parse(localStorage.getItem(LS_CART) || "[]");
         favorites = JSON.parse(localStorage.getItem(LS_FAVORITES) || "[]");
     } catch (e) {
         console.error("Error loading state:", e);
     }
-    
+
     return { theme, user, cart, favorites };
 }
 
@@ -52,34 +50,22 @@ export const state = {
         notify();
     },
 
-    // Theme
-    setTheme(theme) {
-        if (theme !== "warm" && theme !== "cool") return;
-        this.theme = theme;
-        localStorage.setItem(LS_THEME, theme);
-        applyThemeToDOM(theme);
-        notify();
-    },
-
-    toggleTheme() { 
-        this.setTheme(this.theme === "cool" ? "warm" : "cool"); 
-    },
-
-    // User
-    setUser(userObj) { 
-        this.user = userObj; 
-        localStorage.setItem(LS_USER, JSON.stringify(userObj)); 
+    // --- USER METHODS (Auth) ---
+    setUser(userObj) {
+        this.user = userObj;
+        localStorage.setItem(LS_USER, JSON.stringify(userObj));
         this.updateUI();
         notify();
     },
 
-    clearUser() { 
-        this.user = null; 
-        localStorage.removeItem(LS_USER); 
+    clearUser() {
+        this.user = null;
+        localStorage.removeItem(LS_USER);
         this.updateUI();
         notify();
     },
 
+    // REINTEGRADA: La función de login que se había perdido
     async login(email, password) {
         try {
             const userData = await authApi.login(email, password);
@@ -91,6 +77,7 @@ export const state = {
         }
     },
 
+    // REINTEGRADA: La función de registro
     async signup(fullName, document, email, password, role = ["ROLE_USER"]) {
         try {
             const message = await authApi.signup({
@@ -109,19 +96,22 @@ export const state = {
 
     logout() {
         this.clearUser();
+        this.clearCart();
         location.hash = '#/inicio';
     },
 
-    // Cart
+    // --- CART METHODS (Sincronizados con MySQL) ---
     addToCart(viaje) {
-        const existing = this.cart.find(item => item.id === viaje.id);
+        // Buscamos por packageId (llave primaria de tu tabla packages)
+        const existing = this.cart.find(item => String(item.packageId) === String(viaje.packageId));
+
         if (existing) {
             existing.quantity = (existing.quantity || 1) + 1;
         } else {
             this.cart.push({
                 ...viaje,
                 quantity: 1,
-                cartId: Date.now() // ID único para el carrito
+                cartId: Date.now()
             });
         }
         this.saveCart();
@@ -129,8 +119,8 @@ export const state = {
         notify();
     },
 
-    removeFromCart(cartId) {
-        this.cart = this.cart.filter(item => item.cartId !== cartId);
+    removeFromCart(packageId) {
+        this.cart = this.cart.filter(item => String(item.packageId) !== String(packageId));
         this.saveCart();
         this.updateUI();
         notify();
@@ -148,12 +138,15 @@ export const state = {
     },
 
     getCartTotal() {
-        return this.cart.reduce((total, item) => total + (item.precio * item.quantity), 0);
+        return this.cart.reduce((total, item) => {
+            const precio = parseFloat(item.totalPrice) || 0;
+            return total + (precio * (item.quantity || 1));
+        }, 0);
     },
 
-    // Favorites
+    // --- FAVORITES (Sincronizados con packageId) ---
     toggleFavorite(viaje) {
-        const index = this.favorites.findIndex(fav => fav.id === viaje.id);
+        const index = this.favorites.findIndex(fav => String(fav.packageId) === String(viaje.packageId));
         if (index > -1) {
             this.favorites.splice(index, 1);
         } else {
@@ -164,34 +157,44 @@ export const state = {
         notify();
     },
 
-    isFavorite(viajeId) {
-        return this.favorites.some(fav => fav.id === viajeId);
+    isFavorite(packageId) {
+        return this.favorites.some(fav => String(fav.packageId) === String(packageId));
     },
 
-    // UI Updates
+    // --- UI & PUB/SUB ---
     updateUI() {
-        // Actualizar navegación
         const loginBtn = document.getElementById('nav-login');
         const dashboardBtn = document.getElementById('nav-dashboard');
-        
+
         if (this.user) {
             if (loginBtn) loginBtn.classList.add('is-hidden');
             if (dashboardBtn) dashboardBtn.classList.remove('is-hidden');
+            
+            // Mostrar links de admin solo si tiene el rol
+            const roles = this.user.roles || this.user.role || [];
+            const isAdmin = Array.isArray(roles) ? roles.includes('ROLE_ADMIN') : roles === 'ROLE_ADMIN';
+            
+            const adminLink = document.getElementById('nav-admin-link');
+            const testsLink = document.getElementById('nav-tests-link');
+            
+            if (adminLink) {
+                isAdmin ? adminLink.classList.remove('is-hidden') : adminLink.classList.add('is-hidden');
+            }
+            if (testsLink) {
+                isAdmin ? testsLink.classList.remove('is-hidden') : testsLink.classList.add('is-hidden');
+            }
         } else {
             if (loginBtn) loginBtn.classList.remove('is-hidden');
             if (dashboardBtn) dashboardBtn.classList.add('is-hidden');
         }
 
-        // Actualizar contador del carrito
         const cartCount = document.querySelector('.tc-cart-count');
         if (cartCount) {
-            cartCount.textContent = this.cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = this.cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
         }
     },
 
-    // Pub/Sub
     subscribe(fn) { listeners.add(fn); return () => listeners.delete(fn); }
 };
 
-// Global reference for debugging and consistency
 window.tcState = state;
