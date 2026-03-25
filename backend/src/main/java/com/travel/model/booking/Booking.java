@@ -61,6 +61,12 @@ public class Booking {
     @Column(name = "return_date")
     private LocalDate returnDate;
 
+    @Column(name = "cancellation_reason", length = 500)
+    private String cancellationReason;
+
+    @Column(name = "cancellation_date")
+    private LocalDateTime cancellationDate;
+
     @PrePersist
     protected void onCreate() {
         bookingDate = LocalDateTime.now();

@@ -28,6 +28,13 @@ public class Destination {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column(name = "base_price", precision = 10, scale = 2)
+    private java.math.BigDecimal basePrice;
+
+    @Builder.Default
+    @Column(name = "tax_percentage", precision = 5, scale = 2)
+    private java.math.BigDecimal taxPercentage = java.math.BigDecimal.ZERO;
+
     @Column(updatable = false)
     private LocalDateTime createdAt;
 

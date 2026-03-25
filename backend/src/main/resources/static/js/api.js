@@ -24,11 +24,14 @@ async function apiFetch(endpoint, options = {}) {
     ...options.headers,
   };
 
+  const finalUrl = `${API_BASE_URL}${endpoint}`;
+
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
+  } else {
+    console.warn("⚠️ [apiFetch] Sin token para: " + finalUrl);
   }
 
-  const finalUrl = `${API_BASE_URL}${endpoint}`;
   const response = await fetch(finalUrl, {
     ...options,
     headers,
@@ -81,6 +84,7 @@ export const userApi = {
     method: 'PUT',
     body: JSON.stringify(userData),
   }),
+  getAll: () => apiFetch('/users'),
 };
 
 /**
@@ -108,6 +112,10 @@ export const partnerApi = {
 export const packageApi = {
   getAll: () => apiFetch('/packages'),
   getById: (id) => apiFetch(`/packages/${id}`),
+  update: (id, data) => apiFetch(`/packages/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  }),
 };
 
 /**
@@ -115,14 +123,59 @@ export const packageApi = {
  */
 export const bookingApi = {
   getAll: () => apiFetch('/bookings'),
-  searchByEmail: (email) => apiFetch(`/bookings/search?email=${encodeURIComponent(email)}`),
+  search: (params) => {
+    const q = new URLSearchParams(params).toString();
+    return apiFetch(`/bookings/search?${q}`);
+  },
   create: (bookingData) => apiFetch('/bookings', {
     method: 'POST',
     body: JSON.stringify(bookingData),
   }),
-  cancel: (id) => apiFetch(`/bookings/${id}/cancel`, { method: 'POST' }),
+  confirm: (id) => apiFetch(`/bookings/${id}/confirm`, { method: 'PUT' }),
+  cancel: (id, reason) => apiFetch(`/bookings/${id}/cancel?reason=${encodeURIComponent(reason)}`, { method: 'PUT' }),
 };
 
+/**
+ * Itineraries API
+ */
+export const itineraryApi = {
+  getByBooking: (bookingId) => apiFetch(`/itineraries/booking/${bookingId}`),
+  update: (id, data) => apiFetch(`/itineraries/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  }),
+};
+
+/**
+ * Destinations API (Fees & Management)
+ */
+export const destinationApi = {
+  getAll: () => apiFetch('/destinations'),
+  getById: (id) => apiFetch(`/destinations/${id}`),
+  update: (id, data) => apiFetch(`/destinations/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  }),
+};
+
+/**
+ * Audit Logs API
+ */
+export const auditApi = {
+  getAll: () => apiFetch('/audit-logs'),
+};
+
+/**
+ * Payments & Cards API
+ */
+export const paymentApi = {
+  getAll: () => apiFetch('/payment-methods'),
+  create: (data) => apiFetch('/payment-methods', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  }),
+  delete: (id) => apiFetch(`/payment-methods/${id}`, { method: 'DELETE' }),
+};
 /**
  * Admin API (Tests & Management)
  */

@@ -35,6 +35,9 @@ export const template = `
             <button id="edit-profile-btn" class="button is-link is-light is-fullwidth is-rounded py-5" style="height: auto; font-weight: 700;">
               ✏️ Editar Perfil
             </button>
+            <button id="payment-methods-btn" class="button is-warning is-light is-fullwidth is-rounded mt-3">
+              💳 Métodos de Pago
+            </button>
             <button id="consulta-btn" class="button is-info is-light is-fullwidth is-rounded mt-3">
               🔍 Consultar Reserva (Email)
             </button>
@@ -42,6 +45,59 @@ export const template = `
               Cerrar Sesión
             </button>
           </div>
+        </div>
+      </div>
+
+      <!-- Modal Métodos de Pago -->
+      <div id="payment-modal" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">Mis Tarjetas</p>
+            <button class="delete modal-close-btn" aria-label="close"></button>
+          </header>
+          <section class="modal-card-body">
+            <div id="payment-list" class="mb-5">
+                <!-- Tarjetas listadas aquí -->
+            </div>
+            <hr>
+            <h4 class="title is-5">Vincular Nueva Tarjeta</h4>
+            <form id="payment-form">
+                <div class="field">
+                    <label class="label">Titular de la Tarjeta</label>
+                    <div class="control">
+                        <input id="card-holder" class="input" type="text" placeholder="NOMBRE COMO APARECE" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Número de Tarjeta</label>
+                    <div class="control">
+                        <input id="card-number" class="input" type="text" maxlength="16" placeholder="0000 0000 0000 0000" required>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Vencimiento</label>
+                            <div class="control">
+                                <input id="card-expiry" class="input" type="text" placeholder="MM/YY" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">CVV</label>
+                            <div class="control">
+                                <input id="card-cvv" class="input" type="password" maxlength="3" placeholder="***" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+          </section>
+          <footer class="modal-card-foot">
+            <button id="btn-save-card" class="button is-warning is-fullwidth"><strong>Vincular Tarjeta</strong></button>
+          </footer>
         </div>
       </div>
 
@@ -133,6 +189,18 @@ export function initDashboard() {
     saveBtn.addEventListener('click', handleSaveProfile);
   }
 
+  const payBtn = document.getElementById('payment-methods-btn');
+  if (payBtn && !payBtn.dataset.initialized) {
+    payBtn.dataset.initialized = 'true';
+    payBtn.addEventListener('click', openPaymentModal);
+  }
+
+  const saveCardBtn = document.getElementById('btn-save-card');
+  if (saveCardBtn && !saveCardBtn.dataset.initialized) {
+    saveCardBtn.dataset.initialized = 'true';
+    saveCardBtn.addEventListener('click', handleSaveCard);
+  }
+
   const consBtn = document.getElementById('consulta-btn');
   if (consBtn) {
     consBtn.addEventListener('click', () => window.location.hash = '#/consulta');
@@ -148,9 +216,78 @@ function openEditModal() {
 
 function closeEditModal() {
   document.getElementById('edit-profile-modal').classList.remove('is-active');
+  document.getElementById('payment-modal').classList.remove('is-active');
 }
 
-import { userApi } from '../api.js';
+function openPaymentModal() {
+  updatePaymentList();
+  document.getElementById('payment-modal').classList.add('is-active');
+}
+
+import { userApi, paymentApi } from '../api.js';
+
+async function updatePaymentList() {
+    const list = document.getElementById('payment-list');
+    try {
+        const cards = await paymentApi.getAll();
+        if (cards.length === 0) {
+            list.innerHTML = '<p class="has-text-grey-light is-italic">No tienes tarjetas vinculadas.</p>';
+            return;
+        }
+
+        list.innerHTML = cards.map(c => `
+            <div class="is-flex is-justify-content-between is-align-items-center p-3 mb-2" style="background: rgba(0,0,0,0.05); border-radius: 10px;">
+                <div>
+                    <strong class="is-size-6">${c.maskedCardNumber}</strong>
+                    <br>
+                    <small class="has-text-grey uppercase">${c.holderName}</small>
+                </div>
+                <button class="button is-small is-danger is-inverted" onclick="removeCard('${c.id}')">Eliminar</button>
+            </div>
+        `).join('');
+    } catch (e) {
+        list.innerHTML = '<p class="has-text-danger">Error al cargar tarjetas.</p>';
+    }
+}
+
+async function handleSaveCard() {
+    const btn = document.getElementById('btn-save-card');
+    const data = {
+        holderName: document.getElementById('card-holder').value,
+        cardNumber: document.getElementById('card-number').value,
+        expirationDate: document.getElementById('card-expiry').value,
+        methodType: 'Credit/Debit Card'
+    };
+
+    if (!data.cardNumber || data.cardNumber.length < 16) {
+        toast('Número de tarjeta inválido', 'err');
+        return;
+    }
+
+    btn.classList.add('is-loading');
+    try {
+        await paymentApi.create(data);
+        toast('¡Tarjeta vinculada con éxito! 💳', 'ok');
+        document.getElementById('payment-form').reset();
+        updatePaymentList();
+    } catch (error) {
+        toast('Error al vincular tarjeta', 'err');
+    } finally {
+        btn.classList.remove('is-loading');
+    }
+}
+
+window.removeCard = async (id) => {
+    if (confirm('¿Eliminar este método de pago?')) {
+        try {
+            await paymentApi.delete(id);
+            toast('Tarjeta eliminada', 'info');
+            updatePaymentList();
+        } catch (e) {
+            toast('Error al eliminar', 'err');
+        }
+    }
+};
 
 async function handleSaveProfile() {
   const btn = document.getElementById('save-profile-btn');

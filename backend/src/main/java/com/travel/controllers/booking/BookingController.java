@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import com.travel.repository.AuditLogRepository;
+import java.time.LocalDateTime;
 
 import java.util.Collections;
 import java.util.List;
@@ -26,14 +28,22 @@ public class BookingController {
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
     private final PackageRepository packageRepository;
+    private final AuditLogRepository auditLogRepository;
 
     @GetMapping
     public List<Booking> getAll() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        boolean isAdmin = auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        if (isAdmin) {
+            System.out.println("ADMIN Request: Listing all bookings");
+            return bookingRepository.findAll();
+        }
+
         return userRepository.findByEmail(email)
-                .map(user -> bookingRepository.findAll().stream()
-                    .filter(b -> b.getUser().getUserId().equals(user.getUserId()))
-                    .collect(Collectors.toList()))
+                .map(user -> bookingRepository.findByUser(user))
                 .orElse(Collections.emptyList());
     }
 
@@ -107,6 +117,45 @@ public class BookingController {
         }
 
         return ResponseEntity.ok(bookingRepository.save(booking));
+    }
+
+    @PutMapping("/{id}/confirm")
+    public ResponseEntity<Booking> confirm(@PathVariable UUID id) {
+        return bookingRepository.findById(id).map(booking -> {
+            booking.setStatus("Confirmed");
+            return ResponseEntity.ok(bookingRepository.save(booking));
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{id}/cancel")
+    public ResponseEntity<Booking> cancel(@PathVariable UUID id, @RequestParam String reason) {
+        return bookingRepository.findById(id).map(booking -> {
+            booking.setStatus("Cancelled");
+            booking.setCancellationReason(reason);
+            booking.setCancellationDate(LocalDateTime.now());
+            
+            // Recuperar cupos si tiene paquete asignado
+            if (booking.getTravelPackage() != null) {
+                var pkg = booking.getTravelPackage();
+                if (pkg.getAvailableSlots() != null) {
+                    pkg.setAvailableSlots(pkg.getAvailableSlots() + 1);
+                    packageRepository.save(pkg);
+                }
+            }
+            
+            // Auditoría
+            var auth = SecurityContextHolder.getContext().getAuthentication();
+            auditLogRepository.save(com.travel.model.AuditLog.builder()
+                .action("CANCEL_BOOKING")
+                .entityType("Booking")
+                .entityId(booking.getBookingId().toString())
+                .performedBy(auth != null ? auth.getName() : "System")
+                .details("Anulación admin. Motivo: " + reason)
+                .timestamp(LocalDateTime.now())
+                .build());
+
+            return ResponseEntity.ok(bookingRepository.save(booking));
+        }).orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
