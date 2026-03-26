@@ -103,6 +103,7 @@ public class FlightControllerTest {
                 .destination("MDE")
                 .departureDate(LocalDateTime.now().plusDays(1))
                 .availableSeats(10)
+                .basePrice(new java.math.BigDecimal("100.0"))
                 .build();
         Flight savedFlight = flightRepository.save(flight);
         this.flightId = savedFlight.getId();

@@ -94,6 +94,7 @@ public class FlightAdminBookingTest {
                 .origin("BOG")
                 .destination("MDE")
                 .availableSeats(10)
+                .basePrice(new java.math.BigDecimal("100.0"))
                 .departureDate(LocalDateTime.now().plusDays(1))
                 .build());
         this.flightId = flight.getId();

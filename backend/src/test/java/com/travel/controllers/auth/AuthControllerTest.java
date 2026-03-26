@@ -3,6 +3,8 @@ package com.travel.controllers.auth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.travel.dto.auth.SignupRequest;
 import com.travel.model.auth.Role;
+import com.travel.repository.FlightBookingRepository;
+import com.travel.repository.FlightRepository;
 import com.travel.repository.RoleRepository;
 import com.travel.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,9 +39,17 @@ public class AuthControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+    
+    @Autowired
+    private FlightBookingRepository flightBookingRepository;
+    
+    @Autowired
+    private FlightRepository flightRepository;
 
     @BeforeEach
     void setUp() {
+        flightBookingRepository.deleteAll();
+        flightRepository.deleteAll();
         userRepository.deleteAll();
         roleRepository.deleteAll();
         

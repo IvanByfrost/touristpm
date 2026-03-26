@@ -8,11 +8,13 @@ import com.travel.model.auth.Role;
 import com.travel.model.booking.Booking;
 import com.travel.model.finance.Payment;
 import com.travel.model.finance.PaymentMethod;
-import com.travel.repository.RoleRepository;
-import com.travel.repository.UserRepository;
-import com.travel.repository.BookingRepository;
-import com.travel.repository.finance.PaymentMethodRepository;
+import com.travel.repository.FlightBookingRepository;
+import com.travel.repository.FlightRepository;
 import com.travel.repository.finance.PaymentRepository;
+import com.travel.repository.finance.PaymentMethodRepository;
+import com.travel.repository.BookingRepository;
+import com.travel.repository.UserRepository;
+import com.travel.repository.RoleRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,12 +59,20 @@ public class PaymentTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private FlightBookingRepository flightBookingRepository;
+
+    @Autowired
+    private FlightRepository flightRepository;
+
     private String jwtToken;
     private PaymentMethod paymentMethod;
     private Booking booking;
 
     @BeforeEach
     void setUp() throws Exception {
+        flightBookingRepository.deleteAll();
+        flightRepository.deleteAll();
         paymentRepository.deleteAll();
         paymentMethodRepository.deleteAll();
         bookingRepository.deleteAll();

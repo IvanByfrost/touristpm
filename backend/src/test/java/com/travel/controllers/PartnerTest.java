@@ -6,6 +6,8 @@ import com.travel.dto.auth.LoginRequest;
 import com.travel.dto.auth.SignupRequest;
 import com.travel.model.Partner;
 import com.travel.model.auth.Role;
+import com.travel.repository.FlightBookingRepository;
+import com.travel.repository.FlightRepository;
 import com.travel.repository.PartnerRepository;
 import com.travel.repository.RoleRepository;
 import com.travel.repository.UserRepository;
@@ -46,10 +48,18 @@ public class PartnerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private FlightBookingRepository flightBookingRepository;
+
+    @Autowired
+    private FlightRepository flightRepository;
+
     private String adminToken;
 
     @BeforeEach
     void setUp() throws Exception {
+        flightBookingRepository.deleteAll();
+        flightRepository.deleteAll();
         partnerRepository.deleteAll();
         userRepository.deleteAll();
         roleRepository.deleteAll();

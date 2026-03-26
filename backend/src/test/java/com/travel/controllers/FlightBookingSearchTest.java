@@ -101,6 +101,7 @@ public class FlightBookingSearchTest {
                 .destination("MDE")
                 .departureDate(LocalDateTime.now().plusDays(1))
                 .availableSeats(10)
+                .basePrice(new java.math.BigDecimal("100.0"))
                 .build());
 
         BookingRequest bookingReq = new BookingRequest();

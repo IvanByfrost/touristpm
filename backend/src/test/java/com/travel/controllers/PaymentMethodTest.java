@@ -6,6 +6,8 @@ import com.travel.dto.auth.LoginRequest;
 import com.travel.dto.auth.SignupRequest;
 import com.travel.model.finance.PaymentMethod;
 import com.travel.model.auth.Role;
+import com.travel.repository.FlightBookingRepository;
+import com.travel.repository.FlightRepository;
 import com.travel.repository.finance.PaymentMethodRepository;
 import com.travel.repository.RoleRepository;
 import com.travel.repository.UserRepository;
@@ -47,10 +49,18 @@ public class PaymentMethodTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private FlightBookingRepository flightBookingRepository;
+
+    @Autowired
+    private FlightRepository flightRepository;
+
     private String jwtToken;
 
     @BeforeEach
     void setUp() throws Exception {
+        flightBookingRepository.deleteAll();
+        flightRepository.deleteAll();
         paymentMethodRepository.deleteAll();
         userRepository.deleteAll();
         roleRepository.deleteAll();
