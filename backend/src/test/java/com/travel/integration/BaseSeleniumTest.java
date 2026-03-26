@@ -4,9 +4,13 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
@@ -50,6 +54,25 @@ public abstract class BaseSeleniumTest {
     }
     
     protected void loginAsAdmin() {
-        // This will be implemented in specific tests or common utilities
+        driver.get(baseUrl + "/#/login");
+        
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        
+        // Esperar a que el formulario cargue
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("loginForm")));
+        
+        // Llenar datos
+        driver.findElement(By.cssSelector("input[type='email']")).sendKeys("admin@travel.com");
+        driver.findElement(By.cssSelector("input[type='password']")).sendKeys("admin123");
+        driver.findElement(By.cssSelector("#loginForm button")).click();
+        
+        // Esperar a llegar al dashboard y que la UI esté lista
+        wait.until(ExpectedConditions.urlContains("#/dashboard"));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("logout-btn")));
+    }
+
+    protected void waitForToast(String type) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.className("tc-toast-" + type)));
     }
 }

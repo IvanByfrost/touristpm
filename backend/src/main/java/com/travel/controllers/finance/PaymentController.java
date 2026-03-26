@@ -33,10 +33,13 @@ public class PaymentController {
     }
 
     @PostMapping
-    public PaymentDTO processPayment(@RequestBody Payment payment) {
+    public ResponseEntity<?> processPayment(@RequestBody Payment payment) {
+        if (payment.getAmountPaid() == null || payment.getAmountPaid().compareTo(java.math.BigDecimal.ZERO) <= 0) {
+            return ResponseEntity.badRequest().body("El valor del pago debe ser superior a cero");
+        }
         // En un sistema real, aquí llamarías a una pasarela como Stripe o PayPal
         Payment saved = paymentRepository.save(payment);
-        return mapToDTO(saved);
+        return ResponseEntity.ok(mapToDTO(saved));
     }
 
     @PutMapping("/{id}/status")

@@ -36,41 +36,49 @@ public class LoginIntegrationTest extends BaseSeleniumTest {
         com.travel.model.auth.User admin = new com.travel.model.auth.User();
         admin.setEmail("admin@test.com");
         admin.setPassword(passwordEncoder.encode("admin123"));
+        admin.setFullName("Admin Test");
+        admin.setDocument("12345678");
         admin.setRole(adminRole);
         userRepository.save(admin);
     }
 
     @Test
     void testAdminLoginSuccess() {
-        driver.get(baseUrl + "/admin.html");
+        driver.get(baseUrl + "/#/login");
         
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         
-        // CP-SEL-001: Login exitoso
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("login-username"))).sendKeys("admin");
-        driver.findElement(By.id("login-password")).sendKeys("admin123");
-        driver.findElement(By.cssSelector("#login-form button[type='submit']")).click();
+        // Esperar a que el formulario de login sea visible
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("loginForm")));
         
-        // Verificar que el panel de administración se activa
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("#admin-panel.active")));
+        // Ingresar credenciales
+        driver.findElement(By.cssSelector("input[type='email']")).sendKeys("admin@test.com");
+        driver.findElement(By.cssSelector("input[type='password']")).sendKeys("admin123");
+        driver.findElement(By.cssSelector("#loginForm button")).click();
         
-        assertThat(driver.findElement(By.className("user-name")).getText()).isEqualTo("Administrador Principal");
+        // Verificar redirección al dashboard
+        wait.until(ExpectedConditions.urlContains("#/dashboard"));
+        
+        // Verificar que el nav-dashboard es visible (bulma is-hidden removed by JS)
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("nav-dashboard")));
     }
 
     @Test
     void testLoginFailure() {
-        driver.get(baseUrl + "/admin.html");
+        driver.get(baseUrl + "/#/login");
         
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         
-        // CP-SEL-002: Login fallido
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("login-username"))).sendKeys("admin");
-        driver.findElement(By.id("login-password")).sendKeys("wrongpassword");
-        driver.findElement(By.cssSelector("#login-form button[type='submit']")).click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("loginForm")));
         
-        // Verificar que aparece una notificación de error
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.className("notification-error")));
+        driver.findElement(By.cssSelector("input[type='email']")).sendKeys("admin@test.com");
+        driver.findElement(By.cssSelector("input[type='password']")).sendKeys("wrongpassword");
+        driver.findElement(By.cssSelector("#loginForm button")).click();
         
-        assertThat(driver.findElement(By.id("admin-panel")).getAttribute("class")).doesNotContain("active");
+        // Verificar que aparece el toast de error
+        waitForToast("err");
+        
+        // El dashboard NO debe ser visible
+        assertThat(driver.findElement(By.id("nav-dashboard")).isDisplayed()).isFalse();
     }
 }

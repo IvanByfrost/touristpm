@@ -20,6 +20,7 @@ export function toast(msg, type = "info", ms = 1800) {
     }
     
     const colors = { info: "#0ea5e9", ok: "#16a34a", warn: "#f59e0b", err: "#ef4444" };
+    el.className = "tc-toast-" + type;
     el.textContent = msg;
     el.style.borderLeft = `4px solid ${colors[type] || colors.info}`;
     el.style.opacity = "1";

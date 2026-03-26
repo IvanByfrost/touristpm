@@ -1,0 +1,111 @@
+﻿[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------< com.travel:touristchain-service >-------------------
+[INFO] Building touristchain-service 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ touristchain-service ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 25 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ touristchain-service ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ touristchain-service ---
+[INFO] Copying 1 resource from src\test\resources to target\test-classes
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ touristchain-service ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 13 source files with javac [debug parameters release 21] to target\test-classes
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /C:/Users/usuario/Downloads/MiProyectoSelenium/touristchain/backend/src/test/java/com/travel/integration/BaseSeleniumTest.java:[55,9] cannot find symbol
+  symbol:   class WebDriverWait
+  location: class com.travel.integration.BaseSeleniumTest
+[ERROR] /C:/Users/usuario/Downloads/MiProyectoSelenium/touristchain/backend/src/test/java/com/travel/integration/BaseSeleniumTest.java:[55,34] cannot find symbol
+  symbol:   class WebDriverWait
+  location: class com.travel.integration.BaseSeleniumTest
+[ERROR] /C:/Users/usuario/Downloads/MiProyectoSelenium/touristchain/backend/src/test/java/com/travel/integration/BaseSeleniumTest.java:[58,20] cannot find symbol
+  symbol:   variable ExpectedConditions
+  location: class com.travel.integration.BaseSeleniumTest
+[ERROR] /C:/Users/usuario/Downloads/MiProyectoSelenium/touristchain/backend/src/test/java/com/travel/integration/BaseSeleniumTest.java:[58,66] cannot find symbol
+  symbol:   variable By
+  location: class com.travel.integration.BaseSeleniumTest
+[ERROR] /C:/Users/usuario/Downloads/MiProyectoSelenium/touristchain/backend/src/test/java/com/travel/integration/BaseSeleniumTest.java:[61,28] cannot find symbol
+  symbol:   variable By
+  location: class com.travel.integration.BaseSeleniumTest
+[ERROR] /C:/Users/usuario/Downloads/MiProyectoSelenium/touristchain/backend/src/test/java/com/travel/integration/BaseSeleniumTest.java:[62,28] cannot find symbol
+  symbol:   variable By
+  location: class com.travel.integration.BaseSeleniumTest
+[ERROR] /C:/Users/usuario/Downloads/MiProyectoSelenium/touristchain/backend/src/test/java/com/travel/integration/BaseSeleniumTest.java:[63,28] cannot find symbol
+  symbol:   variable By
+  location: class com.travel.integration.BaseSeleniumTest
+[ERROR] /C:/Users/usuario/Downloads/MiProyectoSelenium/touristchain/backend/src/test/java/com/travel/integration/BaseSeleniumTest.java:[66,20] cannot find symbol
+  symbol:   variable ExpectedConditions
+  location: class com.travel.integration.BaseSeleniumTest
+[ERROR] /C:/Users/usuario/Downloads/MiProyectoSelenium/touristchain/backend/src/test/java/com/travel/integration/BaseSeleniumTest.java:[70,9] cannot find symbol
+  symbol:   class WebDriverWait
+  location: class com.travel.integration.BaseSeleniumTest
+[ERROR] /C:/Users/usuario/Downloads/MiProyectoSelenium/touristchain/backend/src/test/java/com/travel/integration/BaseSeleniumTest.java:[70,34] cannot find symbol
+  symbol:   class WebDriverWait
+  location: class com.travel.integration.BaseSeleniumTest
+[ERROR] /C:/Users/usuario/Downloads/MiProyectoSelenium/touristchain/backend/src/test/java/com/travel/integration/BaseSeleniumTest.java:[71,20] cannot find symbol
+  symbol:   variable ExpectedConditions
+  location: class com.travel.integration.BaseSeleniumTest
+[ERROR] /C:/Users/usuario/Downloads/MiProyectoSelenium/touristchain/backend/src/test/java/com/travel/integration/BaseSeleniumTest.java:[71,64] cannot find symbol
+  symbol:   variable By
+  location: class com.travel.integration.BaseSeleniumTest
+[INFO] 12 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  5.214 s
+[INFO] Finished at: 2026-03-25T18:39:31-05:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.13.0:testCompile (default-testCompile) on project touristchain-service: Compilation failure: Compilation failure: 
+[ERROR] /C:/Users/usuario/Downloads/MiProyectoSelenium/touristchain/backend/src/test/java/com/travel/integration/BaseSeleniumTest.java:[55,9] cannot find symbol
+[ERROR]   symbol:   class WebDriverWait
+[ERROR]   location: class com.travel.integration.BaseSeleniumTest
+[ERROR] /C:/Users/usuario/Downloads/MiProyectoSelenium/touristchain/backend/src/test/java/com/travel/integration/BaseSeleniumTest.java:[55,34] cannot find symbol
+[ERROR]   symbol:   class WebDriverWait
+[ERROR]   location: class com.travel.integration.BaseSeleniumTest
+[ERROR] /C:/Users/usuario/Downloads/MiProyectoSelenium/touristchain/backend/src/test/java/com/travel/integration/BaseSeleniumTest.java:[58,20] cannot find symbol
+[ERROR]   symbol:   variable ExpectedConditions
+[ERROR]   location: class com.travel.integration.BaseSeleniumTest
+[ERROR] /C:/Users/usuario/Downloads/MiProyectoSelenium/touristchain/backend/src/test/java/com/travel/integration/BaseSeleniumTest.java:[58,66] cannot find symbol
+[ERROR]   symbol:   variable By
+[ERROR]   location: class com.travel.integration.BaseSeleniumTest
+[ERROR] /C:/Users/usuario/Downloads/MiProyectoSelenium/touristchain/backend/src/test/java/com/travel/integration/BaseSeleniumTest.java:[61,28] cannot find symbol
+[ERROR]   symbol:   variable By
+[ERROR]   location: class com.travel.integration.BaseSeleniumTest
+[ERROR] /C:/Users/usuario/Downloads/MiProyectoSelenium/touristchain/backend/src/test/java/com/travel/integration/BaseSeleniumTest.java:[62,28] cannot find symbol
+[ERROR]   symbol:   variable By
+[ERROR]   location: class com.travel.integration.BaseSeleniumTest
+[ERROR] /C:/Users/usuario/Downloads/MiProyectoSelenium/touristchain/backend/src/test/java/com/travel/integration/BaseSeleniumTest.java:[63,28] cannot find symbol
+[ERROR]   symbol:   variable By
+[ERROR]   location: class com.travel.integration.BaseSeleniumTest
+[ERROR] /C:/Users/usuario/Downloads/MiProyectoSelenium/touristchain/backend/src/test/java/com/travel/integration/BaseSeleniumTest.java:[66,20] cannot find symbol
+[ERROR]   symbol:   variable ExpectedConditions
+[ERROR]   location: class com.travel.integration.BaseSeleniumTest
+[ERROR] /C:/Users/usuario/Downloads/MiProyectoSelenium/touristchain/backend/src/test/java/com/travel/integration/BaseSeleniumTest.java:[70,9] cannot find symbol
+[ERROR]   symbol:   class WebDriverWait
+[ERROR]   location: class com.travel.integration.BaseSeleniumTest
+[ERROR] /C:/Users/usuario/Downloads/MiProyectoSelenium/touristchain/backend/src/test/java/com/travel/integration/BaseSeleniumTest.java:[70,34] cannot find symbol
+[ERROR]   symbol:   class WebDriverWait
+[ERROR]   location: class com.travel.integration.BaseSeleniumTest
+[ERROR] /C:/Users/usuario/Downloads/MiProyectoSelenium/touristchain/backend/src/test/java/com/travel/integration/BaseSeleniumTest.java:[71,20] cannot find symbol
+[ERROR]   symbol:   variable ExpectedConditions
+[ERROR]   location: class com.travel.integration.BaseSeleniumTest
+[ERROR] /C:/Users/usuario/Downloads/MiProyectoSelenium/touristchain/backend/src/test/java/com/travel/integration/BaseSeleniumTest.java:[71,64] cannot find symbol
+[ERROR]   symbol:   variable By
+[ERROR]   location: class com.travel.integration.BaseSeleniumTest
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

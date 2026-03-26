@@ -52,6 +52,9 @@ export const state = {
 
     // --- USER METHODS (Auth) ---
     setUser(userObj) {
+        if (userObj && userObj.roles && !userObj.role) {
+            userObj.role = userObj.roles[0];
+        }
         this.user = userObj;
         localStorage.setItem(LS_USER, JSON.stringify(userObj));
         this.updateUI();
@@ -172,7 +175,9 @@ export const state = {
             
             // Mostrar links de admin solo si tiene el rol
             const roles = this.user.roles || this.user.role || [];
-            const isAdmin = Array.isArray(roles) ? roles.includes('ROLE_ADMIN') : roles === 'ROLE_ADMIN';
+            const roleList = Array.isArray(roles) ? roles : [roles];
+            const normalizedRoles = roleList.map(r => r.startsWith('ROLE_') ? r.substring(5) : r);
+            const isAdmin = normalizedRoles.includes('ADMIN');
             
             const adminLink = document.getElementById('nav-admin-link');
             const testsLink = document.getElementById('nav-tests-link');

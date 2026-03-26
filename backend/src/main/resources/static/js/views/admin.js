@@ -53,7 +53,7 @@ export const template = `
               <div class="field">
                 <label class="label">Precio Total ($)</label>
                 <div class="control">
-                  <input id="edit-package-price" class="input" type="number" step="0.001" min="0" required>
+                  <input id="edit-package-price" class="input" type="number" step="0.01" min="0.01" required>
                 </div>
               </div>
             </div>
@@ -195,7 +195,7 @@ export const template = `
           <div class="field">
             <label class="label">Total a Cobrar ($)</label>
             <div class="control">
-              <input id="admin-booking-amount" class="input" type="number" step="0.001" min="0" required>
+              <input id="admin-booking-amount" class="input" type="number" step="0.01" min="0.01" required>
             </div>
           </div>
           <div class="field">
@@ -290,7 +290,7 @@ export const template = `
               <div class="field">
                 <label class="label">Precio Base ($)</label>
                 <div class="control">
-                  <input id="edit-dest-price" class="input" type="number" step="0.001" min="0" required>
+                  <input id="edit-dest-price" class="input" type="number" step="0.01" min="0.01" required>
                 </div>
               </div>
             </div>
@@ -321,8 +321,8 @@ export async function initAdmin() {
     console.log('Initializing Admin View...');
     
     // Check if user is admin
-    const roles = state.user?.roles || state.user?.role || [];
-    const isAdmin = Array.isArray(roles) ? roles.includes('ROLE_ADMIN') : roles === 'ROLE_ADMIN';
+    const roles = state.user?.roles || (state.user?.role ? [state.user.role] : []);
+    const isAdmin = roles.some(r => r === 'ADMIN' || r === 'ROLE_ADMIN');
 
     if (!isAdmin) {
         toast("Acceso denegado: Se requiere rol de administrador", "err");
@@ -410,6 +410,11 @@ function setupDestinationHandlers() {
             taxPercentage: parseFloat(taxInput.value)
         };
 
+        if (parseFloat(priceInput.value) <= 0) {
+            toast("El valor de la tarifa debe ser superior a cero", "err");
+            return;
+        }
+
         saveBtn.classList.add('is-loading');
         try {
             await destinationApi.update(id, data);
@@ -417,7 +422,7 @@ function setupDestinationHandlers() {
             modal.classList.remove('is-active');
             loadSection('destinations');
         } catch (error) {
-            toast("Error al actualizar tarifas", "err");
+            toast(error.message, "err");
         } finally {
             saveBtn.classList.remove('is-loading');
         }
@@ -590,6 +595,11 @@ function setupAdminBookingHandlers() {
         };
 
         saveBtn.classList.add('is-loading');
+        if (data.totalAmount <= 0) {
+            toast("El valor de la tarifa debe ser superior a cero", "err");
+            saveBtn.classList.remove('is-loading');
+            return;
+        }
         try {
             await bookingApi.create(data);
             toast("Reserva administrativa creada con éxito ✅", "ok");
@@ -832,6 +842,11 @@ function setupModalHandlers() {
             availableSlots: parseInt(document.getElementById('edit-package-slots').value),
             description: document.getElementById('edit-package-desc').value,
         };
+
+        if (data.totalPrice <= 0) {
+            toast("El valor de la tarifa debe ser superior a cero", "err");
+            return;
+        }
 
         saveBtn.classList.add('is-loading');
         try {
